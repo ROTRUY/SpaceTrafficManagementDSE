@@ -152,6 +152,11 @@ if __name__ == "__main__":
     pltpower = True
     if pltpower:
         plt.plot(periodlst, powerlst)
+        plt.axvline(x = 60, linestyle='dashed', color='blue', label = '1min sampling period')
+        plt.axvline(x = 600, linestyle='dashed', color='red', label = '10min sampling period')
+        plt.axvline(x = 60*60, linestyle='dashed', color='purple', label = '1hr sampling period')
+        plt.axvline(x = 60*60*8, linestyle='dashed', color='orange', label = '8hr sampling period')
+        plt.legend()
         plt.xscale('log')
         plt.xlabel('Sampling period [s]')
         plt.ylabel('Power usage [mW]')
@@ -165,6 +170,10 @@ if __name__ == "__main__":
         plt.plot(periodlst, dataAlst, label='Option A')
         plt.plot(periodlst, dataBlst, label='Option B')
         plt.plot(periodlst, dataClst, label='Option C')
+        plt.axvline(x = 60, linestyle='dashed', color='blue', label = '1min sampling period')
+        plt.axvline(x = 600, linestyle='dashed', color='red', label = '10min sampling period')
+        plt.axvline(x = 60*60, linestyle='dashed', color='purple', label = '1hr sampling period')
+        plt.axvline(x = 60*60*8, linestyle='dashed', color='orange', label = '8hr sampling period')
         plt.legend()
         plt.xscale('log')
         plt.xlabel('Sampling period [s]')
