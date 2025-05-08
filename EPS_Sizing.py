@@ -1,6 +1,9 @@
-# EPS Solar Array Sizing
 import math
 import numpy as np
+
+#--------------------------------------------------------------------
+# SOLAR ARRAY SIZING
+#--------------------------------------------------------------------
 
 
 P_sun = 1367  #Solar flux at 1 au in W/m^2
@@ -8,10 +11,10 @@ t_mis = 6  #Mission duration in months
 
 #Power Requirements
 
-P_sc_day = 3.5  #Power requirement of the SC during day in W
-P_sc_ecl = 3.5  #Power requirement of the SC during eclipse in W
+P_sc_day = 10.0  #Power requirement of the SC during day in W
+P_sc_ecl = 10.0  #Power requirement of the SC during eclipse in W
 
-P_pl = 0  #Power requirement of the PL in W
+P_pl = 0.1  #Power requirement of the PL in W
 t_pl = 12  #Measurement duration of the PL in ms
 f_pl = 10  #Measurement frequency of the PL in min (i.e. one snapshot every x minutes)
 
@@ -23,10 +26,10 @@ P_ecl_avg = P_sc_ecl + P_pl * ((t_pl / 100) / (f_pl * 60))  #Average power durin
 
 #Orbit Values 
 
-t_day = 100  #Day time in minutes
-t_ecl = 0  #Eclipse time in minutes
+t_day = 65  #Day time in minutes
+t_ecl = 30  #Eclipse time in minutes
 
-theta = 0  #Incidence angle of the solar arrays (worst case)
+theta = 0  #Incidence angle of the solar arrays 
 
 #Solar Cell Properties
 
@@ -43,7 +46,7 @@ eta_PPT_ecl = 0.6  #Eclipse efficiency for Peak Power Tracking
 eta_DET_day = 0.85  #Day efficiency for Direct Energy Transfer
 eta_DET_ecl = 0.65  #Eclipse efficiency for Direct Energy Transfer
 
-power_regulation_type = 1  #1=PPT, 2=DET
+power_regulation_type = 2  #1=PPT, 2=DET
 
 # ----------------------------------------------------------------------
 
@@ -74,7 +77,30 @@ L_d = (1 - degradation_rate/100)**(t_mis / 12)
 P_EOL_delta = P_BOL_delta * L_d
 P_EOL_sp = P_BOL_sp * L_d
 
-A_SA = P_req / P_EOL_delta
-M_SA = P_req / P_EOL_sp
+A_SA = P_req / P_EOL_delta  #Area of the solar arrays in m^2.
+M_SA = P_req / P_EOL_sp  #Weight of the solar arrays in kg.
 
 print("To generate " + str(P_req) + " W, a solar array of "  + str(A_SA * 10**4) + " cm^2 which weighs " + str(M_SA) + " kg is required")
+
+
+#--------------------------------------------------------------------
+# BATTERY SIZING
+#--------------------------------------------------------------------
+
+
+#Battery Data
+
+eta_bat = 0.9  #Total efficiency of the battery and the discharge electronics
+DOD = 0.7  #Depth of discharge of the battery (Obtained from the graphs)
+
+E_delta_bat = 71  #Specific power of the battery in Wh/L
+E_sp_bat = 48  #Specific power of the battery in Wh/kg
+
+#Battery Sizing
+
+E_bat = (P_e * (t_ecl / 60)) / (DOD * eta_bat)  #Energy stored in battery in Wh.
+
+V_bat = E_bat / E_delta_bat  #in L.
+M_bat = E_bat / E_sp_bat  #in kg.
+
+print("To store " + str(E_bat) + " Wh, a battery of "  + str(V_bat * 10**3) + " cm^3 which weighs " + str(M_bat) + " kg is required")
