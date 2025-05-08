@@ -56,7 +56,7 @@ def ground_station_contact(h: int|float, fov: int|float=180) -> int|float:
 
 def power_usage_sp(T: int|float=3600) -> int|float:
     """
-    This function calculates the power usage of the standardized payload.
+    This function calculates the power usage of the standardized payload for option A.
 
     Accounts for
     ---
@@ -72,11 +72,11 @@ def power_usage_sp(T: int|float=3600) -> int|float:
     ---
     - `p`: Power usage of the standardized payload in [W].
     """
-    pu_snap = 1e-6  # Power usage of a single snapshot [Wh]
-    pu_sleep = 5.3e-6  # Power usage of microcontroller in sleeping mode [W]
-    pu_antenna = 37e-3  # Power usage of antenna [W]
+    pu_snap = 1e-3 # Power usage of a single snapshot [mWh]
+    pu_sleep = 5.3e-3  # Power usage of microcontroller in sleeping mode [mW]
+    pu_antenna = 37  # Power usage of antenna [mW]
 
-    return pu_antenna + pu_sleep + 1/T * pu_snap * 3600
+    return pu_antenna + pu_sleep + pu_snap * 3600 / T
 
 def data_generated(option: str='A') -> int|float:
     """
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     dataAlst = []
     dataBlst = []
     dataClst = []
-    for T in range(1, 24*60*60+1):
+    for T in range(30, 24*60*60+1):
         periodlst.append(T)
         powerlst.append(power_usage_sp(T))
         dataAlst.append(data_generated('A') * 24*60*60/T)
