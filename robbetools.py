@@ -70,7 +70,7 @@ def power_usage_sp(T: int|float=3600) -> int|float:
 
     Outputs
     ---
-    - `p`: Power usage of the standardized payload in [W].
+    - `p`: Power usage of the standardized payload in [mW].
     """
     pu_snap = 1e-3 # Power usage of a single snapshot [mWh]
     pu_sleep = 5.3e-3  # Power usage of microcontroller in sleeping mode [mW]
@@ -148,6 +148,7 @@ if __name__ == "__main__":
         dataAlst.append(data_generated('A') * 24*60*60/T)
         dataBlst.append(data_generated('B') * 24*60*60/T)
         dataClst.append(data_generated('C') * 24*60*60/T)
+    print(data_generated('A'), data_generated('B'), data_generated('C'))
     
     pltpower = True
     if pltpower:
