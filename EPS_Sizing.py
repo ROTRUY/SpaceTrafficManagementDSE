@@ -20,8 +20,8 @@ theta = 0  #Incidence angle of the solar arrays
 
 #Power Requirements
 
-P_sc_day = 10.0  #Power requirement of the SC during day in W
-P_sc_ecl = 10.0  #Power requirement of the SC during eclipse in W
+P_sc_day = 10  #Power requirement of the SC during day in W
+P_sc_ecl = 10  #Power requirement of the SC during eclipse in W
 
 P_pl_snap = 0.1  #Extra power requirement due to snapshot in W
 t_pl_snap = 1  #Measurement duration of the PL in s
@@ -46,7 +46,7 @@ P_ecl_avg = P_sc_ecl + P_pl_snap * (t_pl_snap / (f_pl_snap * 60)) + P_pl_eph * (
 
 eta_SC = 0.30  #Efficiency of the solar cell
 degradation_rate = 0.5  #Degradation/year of the solar cell in %
-P_sp_opt = 150  #Specific power of the solar cell in W/kg at 0 degree incidence
+P_sp_opt = 100  #Specific power of the solar cell in W/kg at 0 degree incidence
 I_d = 0.72  #Inherent degradation of solar cells
 
 #Power Regulation Values
