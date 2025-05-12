@@ -20,8 +20,8 @@ theta = 0  #Incidence angle of the solar arrays
 
 #Power Requirements
 
-P_sc_day = 10  #Power requirement of the SC during day in W
-P_sc_ecl = 10  #Power requirement of the SC during eclipse in W
+P_sc_day = 5  #Power requirement of the SC during day in W
+P_sc_ecl = 5  #Power requirement of the SC during eclipse in W
 
 P_pl_snap = 0.1  #Extra power requirement due to snapshot in W
 t_pl_snap = 1  #Measurement duration of the PL in s
@@ -46,7 +46,7 @@ P_ecl_avg = P_sc_ecl + P_pl_snap * (t_pl_snap / (f_pl_snap * 60)) + P_pl_eph * (
 
 eta_SC = 0.30  #Efficiency of the solar cell
 degradation_rate = 0.5  #Degradation/year of the solar cell in %
-P_sp_opt = 100  #Specific power of the solar cell in W/kg at 0 degree incidence
+P_sp_EOL = 125  #Specific power of the solar cell in W/kg at EOL in normal operation conditions
 I_d = 0.72  #Inherent degradation of solar cells
 
 #Power Regulation Values
@@ -57,7 +57,7 @@ eta_PPT_ecl = 0.6  #Eclipse efficiency for Peak Power Tracking
 eta_DET_day = 0.85  #Day efficiency for Direct Energy Transfer
 eta_DET_ecl = 0.65  #Eclipse efficiency for Direct Energy Transfer
 
-power_regulation_type = 2  #1=PPT, 2=DET
+power_regulation_type = 1  #1=PPT, 2=DET
 
 # ----------------------------------------------------------------------
 
@@ -81,15 +81,13 @@ P_req = (P_d * t_day / eta_day + P_e * t_ecl / eta_ecl) / t_day  #Total power th
 P_delta_opt = P_sun * eta_SC
 
 P_BOL_delta = P_delta_opt * math.cos(math.radians(theta)) * I_d  #Power delivered by a m^2 of a solar cell at BOL
-P_BOL_sp = P_sp_opt * math.cos(math.radians(theta)) * I_d  #Power delivered by a g of a solar cell at BOL
 
 L_d = (1 - degradation_rate/100)**(t_mis / 12)
 
 P_EOL_delta = P_BOL_delta * L_d
-P_EOL_sp = P_BOL_sp * L_d
 
 A_SA = P_req / P_EOL_delta  #Area of the solar arrays in m^2.
-M_SA = P_req / P_EOL_sp  #Mass of the solar arrays in kg.
+M_SA = P_req / P_sp_EOL  #Mass of the solar arrays in kg.
 
 print("To generate " + str(P_req) + " W, a solar array of "  + str(A_SA * 10**4) + " cm^2 which weighs " + str(M_SA) + " kg is required")
 
