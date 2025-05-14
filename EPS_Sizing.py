@@ -12,22 +12,22 @@ t_mis = 6  #Mission duration in months
 
 #Orbit Values 
 
-t_day = 60  #Day time in minutes
-t_ecl = 36  #Eclipse time in minutes
+t_day = 62  #Day time in minutes
+t_ecl = 33  #Eclipse time in minutes
 t_orb = t_day + t_ecl  #Orbit time in minutes
 
-theta = 0  #Incidence angle of the solar arrays 
+theta = 23.5  #Incidence angle of the solar arrays 
 
 #Power Requirements
 
-P_sc_day = 5  #Power requirement of the SC during day in W
-P_sc_ecl = 5  #Power requirement of the SC during eclipse in W
+P_sc_day = 12  #Power requirement of the SC during day in W
+P_sc_ecl = 10  #Power requirement of the SC during eclipse in W
 
 P_pl_snap = 0.1  #Extra power requirement due to snapshot in W
 t_pl_snap = 1  #Measurement duration of the PL in s
 f_pl_snap = 10  #Measurement frequency of the PL in min (i.e. one snapshot every x minutes)
 
-P_pl_eph = 0.3  #Extra power requirement due to ephemeris data gathering in W
+P_pl_eph = 0.2  #Extra power requirement due to ephemeris data gathering in W
 t_pl_eph = 30  #Measurement duration of the ephemeris data in s
 f_pl_eph = 30  #Ephemeris receiving frequency of the PL in min (i.e. one ephemeris capturing every x hr)
 
@@ -46,7 +46,7 @@ P_ecl_avg = P_sc_ecl + P_pl_snap * (t_pl_snap / (f_pl_snap * 60)) + P_pl_eph * (
 
 eta_SC = 0.30  #Efficiency of the solar cell
 degradation_rate = 0.5  #Degradation/year of the solar cell in %
-P_sp_EOL = 125  #Specific power of the solar cell in W/kg at EOL in normal operation conditions
+P_sp = 46  #Power generate by solar array at optimal conditions & BOL in W
 I_d = 0.72  #Inherent degradation of solar cells
 
 #Power Regulation Values
@@ -57,7 +57,7 @@ eta_PPT_ecl = 0.6  #Eclipse efficiency for Peak Power Tracking
 eta_DET_day = 0.85  #Day efficiency for Direct Energy Transfer
 eta_DET_ecl = 0.65  #Eclipse efficiency for Direct Energy Transfer
 
-power_regulation_type = 1  #1=PPT, 2=DET
+power_regulation_type = 2  #1=PPT, 2=DET
 
 # ----------------------------------------------------------------------
 
@@ -87,7 +87,9 @@ L_d = (1 - degradation_rate/100)**(t_mis / 12)
 P_EOL_delta = P_BOL_delta * L_d
 
 A_SA = P_req / P_EOL_delta  #Area of the solar arrays in m^2.
-M_SA = P_req / P_sp_EOL  #Mass of the solar arrays in kg.
+
+P_SA_BOL = A_SA * P_BOL_delta  #Power delivered by the solar array at BOL in W.
+M_SA = P_req / P_sp  #Mass of the solar arrays in kg.
 
 print("To generate " + str(P_req) + " W, a solar array of "  + str(A_SA * 10**4) + " cm^2 which weighs " + str(M_SA) + " kg is required")
 
@@ -99,11 +101,11 @@ print("To generate " + str(P_req) + " W, a solar array of "  + str(A_SA * 10**4)
 
 #Battery Data
 
-eta_bat = 0.9  #Total efficiency of the battery and the discharge electronics
+eta_bat = 0.98  #Total efficiency of the battery and the discharge electronics
 DOD = 0.7  #Depth of discharge of the battery (Obtained from the graphs)
 
-E_delta_bat = 71  #Specific power of the battery in Wh/L
-E_sp_bat = 48  #Specific power of the battery in Wh/kg
+E_delta_bat = 250  #Specific power of the battery in Wh/L
+E_sp_bat = 125  #Specific power of the battery in Wh/kg
 
 #Battery Sizing
 
@@ -121,8 +123,8 @@ print("To store " + str(E_bat) + " Wh, a battery of "  + str(V_bat * 10**3) + " 
 
 #Power control & distribution unit is selected from commercially available PCU, PCD, and PCDUs (current pick: )
 
-M_PCDU = 0.086  #Mass of the PCDU in kg
-V_PCDU = 140.1  #Volume of the battery in cm^3 (95.89mm x 90.17mm x 1.62mm)
+M_PCDU = 0.148  #Mass of the PCDU in kg
+V_PCDU = 180.02  #Volume of the battery in cm^3 (95.89mm x 90.17mm x 20.82mm) - ACC Clyde NanoPlus PCDU
 
 print("The PCDU is able to handle " + str(P_day_peak) + " W, weighing "  + str(M_PCDU) + " kg and having a volume of " + str(V_PCDU) + " cm^3")
 
