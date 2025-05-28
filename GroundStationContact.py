@@ -48,18 +48,25 @@ def read_file(file):
 number_of_events50 = read_file('data/GSContactData50.txt')
 number_of_events55 = read_file('data/GSContactData55.txt')
 number_of_events58 = read_file('data/GSContactData58.txt')
+number_of_events59 = read_file('data/GSContactData59.txt')
 number_of_events60 = read_file('data/GSContactData60.txt')
+number_of_events61 = read_file('data/GSContactData61.txt')
 number_of_events62 = read_file('data/GSContactData62.txt')
+number_of_events63 = read_file('data/GSContactData63.txt')
+number_of_events64 = read_file('data/GSContactData64.txt')
 number_of_events65 = read_file('data/GSContactData65.txt')
 number_of_events98 = read_file('data/GSContactData98.txt')
-inclinations = [50, 55, 58, 60, 62, 65, 98]
+inclinations = [50, 55, 58, 60, 61, 62, 63, 64, 65, 98]  # Match the number of total_durations entries
 # Print number of events table
 number_of_events = [
     number_of_events50,
     number_of_events55,
     number_of_events58,
     number_of_events60,
+    number_of_events61,
     number_of_events62,
+    number_of_events63,
+    number_of_events64,
     number_of_events65,
     number_of_events98
 ]
@@ -76,9 +83,34 @@ GSCD50 = read_gsc('data/GSContactData50.txt')
 GSCD55 = read_gsc('data/GSContactData55.txt')
 GSCD58 = read_gsc('data/GSContactData58.txt')
 GSCD60 = read_gsc('data/GSContactData60.txt')
+GSCD61 = read_gsc('data/GSContactData61.txt')
 GSCD62 = read_gsc('data/GSContactData62.txt')
+GSCD63 = read_gsc('data/GSContactData63.txt')
+GSCD64 = read_gsc('data/GSContactData64.txt')  
 GSCD65 = read_gsc('data/GSContactData65.txt')
 GSCD98 = read_gsc('data/GSContactData98.txt')
+
+# Plot inclinations vs number of GSCD events
+gscd_lengths = [
+    len(GSCD50[0]),
+    len(GSCD55[0]),
+    len(GSCD58[0]),
+    len(GSCD60[0]),
+    len(GSCD61[0]),
+    len(GSCD62[0]),
+    len(GSCD63[0]),
+    len(GSCD64[0]),
+    len(GSCD65[0]),
+    len(GSCD98[0])
+]
+
+plt.figure()
+plt.plot(inclinations, gscd_lengths, marker='o')
+plt.xlabel('Inclination (deg)')
+plt.ylabel('Number of GSCD Events')
+plt.title('Number of GSCD Events vs Inclination')
+plt.grid(True)
+plt.show()
 # Print the number of contacts
 
 # Determine total duration 
@@ -86,9 +118,35 @@ total_duration50 = sum(GSCD50[2])
 total_duration55 = sum(GSCD55[2])
 total_duration58 = sum(GSCD58[2])
 total_duration60 = sum(GSCD60[2])
+total_duration61 = sum(GSCD61[2])
 total_duration62 = sum(GSCD62[2])
+total_duration63 = sum(GSCD63[2])
+total_duration64 = sum(GSCD64[2])
 total_duration65 = sum(GSCD65[2])
 total_duration98 = sum(GSCD98[2])
+
+# Convert total durations from seconds to hours
+total_durations = [
+    total_duration50 / 3600,
+    total_duration55 / 3600,
+    total_duration58 / 3600,
+    total_duration60 / 3600,
+    total_duration61 / 3600,
+    total_duration62 / 3600,
+    total_duration63 / 3600,
+    total_duration64 / 3600,
+    total_duration65 / 3600,
+    total_duration98 / 3600
+]
+
+# Plot inclinations vs total duration (hours)
+plt.figure()
+plt.plot(inclinations, total_durations, marker='o')
+plt.xlabel('Inclination (deg)')
+plt.ylabel('Total Duration (hours)')
+plt.title('Total Contact Duration vs Inclination')
+plt.grid(True)
+plt.show()  
 
 # Create a table of inclination and total duration
 
@@ -97,9 +155,12 @@ total_durations = [
     total_duration55,
     total_duration58,
     total_duration60,
+    total_duration61,
     total_duration62,
+    total_duration63,
+    total_duration64,
     total_duration65,
-    total_duration98 
+    total_duration98
 ]
 
 print("\nInclination (deg) | Total Duration (s)")
@@ -119,13 +180,13 @@ no_contact_lst = []
 #print(max(no_contact_lst))
 
 ### PLOTTERDEPLOT
-plot = False
-nr = 50  # Number of durations to plot
+# plot = False
+# nr = 50  # Number of durations to plot
 
-if plot:
-    x = range(len(GSCD[2]))
-    if nr > len(x):  # Remove user errors
-        nr = len(x)
+# if plot:
+#     x = range(len(GSCD[2]))
+#     if nr > len(x):  # Remove user errors
+#         nr = len(x)
 
-    plt.bar(x[:nr], GSCD[2][:nr])
-    plt.show()
+#     plt.bar(x[:nr], GSCD[2][:nr])
+#     plt.show()
