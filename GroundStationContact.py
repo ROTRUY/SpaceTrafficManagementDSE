@@ -56,12 +56,13 @@ number_of_events63 = read_file('data/GSContactData63.txt')
 number_of_events64 = read_file('data/GSContactData64.txt')
 number_of_events65 = read_file('data/GSContactData65.txt')
 number_of_events98 = read_file('data/GSContactData98.txt')
-inclinations = [50, 55, 58, 60, 61, 62, 63, 64, 65, 98]  # Match the number of total_durations entries
+inclinations = [50, 55, 58,59, 60, 61, 62, 63, 64, 65, 98]  # Match the number of total_durations entries
 # Print number of events table
 number_of_events = [
     number_of_events50,
     number_of_events55,
     number_of_events58,
+    number_of_events59, 
     number_of_events60,
     number_of_events61,
     number_of_events62,
@@ -82,6 +83,7 @@ for inc, num in zip(inclinations, number_of_events):
 GSCD50 = read_gsc('data/GSContactData50.txt')
 GSCD55 = read_gsc('data/GSContactData55.txt')
 GSCD58 = read_gsc('data/GSContactData58.txt')
+GSCD59 = read_gsc('data/GSContactData59.txt')
 GSCD60 = read_gsc('data/GSContactData60.txt')
 GSCD61 = read_gsc('data/GSContactData61.txt')
 GSCD62 = read_gsc('data/GSContactData62.txt')
@@ -95,6 +97,7 @@ gscd_lengths = [
     len(GSCD50[0]),
     len(GSCD55[0]),
     len(GSCD58[0]),
+    len(GSCD59[0]),
     len(GSCD60[0]),
     len(GSCD61[0]),
     len(GSCD62[0]),
@@ -107,8 +110,8 @@ gscd_lengths = [
 plt.figure()
 plt.plot(inclinations, gscd_lengths, marker='o')
 plt.xlabel('Inclination (deg)')
-plt.ylabel('Number of GSCD Events')
-plt.title('Number of GSCD Events vs Inclination')
+plt.ylabel('Visition Frequency (Number of Contacts)')
+plt.title('Visition Frequency vs Inclination')
 plt.grid(True)
 plt.show()
 # Print the number of contacts
@@ -117,6 +120,7 @@ plt.show()
 total_duration50 = sum(GSCD50[2])
 total_duration55 = sum(GSCD55[2])
 total_duration58 = sum(GSCD58[2])
+total_duration59 = sum(GSCD59[2])
 total_duration60 = sum(GSCD60[2])
 total_duration61 = sum(GSCD61[2])
 total_duration62 = sum(GSCD62[2])
@@ -130,6 +134,7 @@ total_durations = [
     total_duration50 / 3600,
     total_duration55 / 3600,
     total_duration58 / 3600,
+    total_duration59 / 3600,
     total_duration60 / 3600,
     total_duration61 / 3600,
     total_duration62 / 3600,
@@ -154,6 +159,7 @@ total_durations = [
     total_duration50,
     total_duration55,
     total_duration58,
+    total_duration59,
     total_duration60,
     total_duration61,
     total_duration62,
