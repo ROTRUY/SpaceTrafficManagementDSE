@@ -37,6 +37,14 @@ def read_gsc(file: str) -> list[list[datetime], list[datetime], list[float]]:
 # Read data, save into list of lists
 GSCD = read_gsc('data/GSContactData55.txt')
 
+# Determine total duration 
+total_duration = sum(GSCD[2])
+
+# Optionally print it in seconds, minutes, or as a timedelta
+print(f"Total Duration: {total_duration:.2f} seconds")
+
+# In minutes
+print(f"Total Duration: {total_duration / 60:.2f} minutes")
 
 no_contact_lst = []
 # Get time between contacts
