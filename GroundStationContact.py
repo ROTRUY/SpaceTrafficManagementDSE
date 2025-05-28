@@ -129,6 +129,7 @@ plt.xlabel('Inclination (deg)')
 plt.ylabel('Visition Frequency (Number of Contacts)')
 #plt.title('Visition Frequency vs Inclination')
 plt.grid(True)
+plt.tight_layout()
 plt.savefig("plots/VisitFreqIfoInc")
 # Print the number of contacts
 
@@ -175,6 +176,7 @@ plt.xlabel('Inclination (deg)')
 plt.ylabel('Total Duration (hours)')
 #plt.title('Total Contact Duration vs Inclination')
 plt.grid(True)
+plt.tight_layout()
 plt.savefig("plots/TotDurIfoInc")  
 
 # Create a table of inclination and total duration
