@@ -151,8 +151,30 @@ def solar_radiation_pressure_torque(A_s: int|float, q: int|float, phi: int|float
     """
     return Phi / c * A_s * (1 + q) * d * cos(phi*pi/180)
 
+def gravity_gradient_torque_worst_case(L: int|float, m: int|float, h: int|float) -> float:
+    """
+    Function to calculate the worst case gravity gradient torque on a satellite.
+
+    Inputs
+    ---
+    - `L:` Length of the satellite in [m].
+    - `m:` Mass of the satellite in [kg].
+    - `h:` Altitude of the satellite in [km].
+
+    Outputs
+    ---
+    - `T_gg:` Worst case gravity gradient torque in [Nm].
+    """
+    r = r_earth + h  # Distance from the center of the earth to the satellite in [m]
+    G = 6.67430e-11  # Gravitational constant [m³ kg⁻¹ s⁻²]
+    F1 = G * mu_earth * m / 2 / (r - L / 2)**2
+    F2 = G * mu_earth * m / 2 / (r + L / 2)**2
+    
+    return (F1 - F2) * L / 2  # Torque in [Nm]. The factor of 2 is because the torque is calculated for the center of mass, not the center of the satellite.
+
 ### CLASSES / OBJECTS
 
 ### MAIN
 if __name__ == "__main__":
-    print(solar_radiation_pressure_torque(0.01, 1, 0, 0.1))
+    #print(solar_radiation_pressure_torque(0.01, .2, 0, 0.1))
+    print(gravity_gradient_torque_worst_case(0.1, 5, 500 * 1000))
