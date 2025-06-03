@@ -166,7 +166,7 @@ def gravity_gradient_torque_worst_case(L: int|float, m: int|float, h: int|float,
     ---
     - `T_gg:` Worst case gravity gradient torque in [Nm].
     """
-    r = (r_earth + h)*1000  # Distance from the center of the earth to the satellite in [m]
+    r = (r_earth + h) * 1000  # Distance from the center of the earth to the satellite in [m]
     
     if theta is None:
         return max(gravity_gradient_torque_worst_case(L, m, h, theta=theta) for theta in [n/10 for n in range(0, 70)])  # Calculate the maximum torque over all angles
@@ -182,10 +182,32 @@ def gravity_gradient_torque_alt(h: int|float, m: int|float, r: int|float) -> flo
     """
     return 3 * mu_earth / (2 * 1000 * (h + r_earth))**3 * m * r**2
 
+def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
+    """
+    Function to calculate the aerodynamic drag torque on a satellite.
+
+    Inputs
+    ---
+    - `A:` Cross-sectional area of the satellite in [m²].
+    - `h:` Altitude of the satellite in [km].
+
+    Outputs
+    ---
+    - `T_ad:` Aerodynamic drag torque in [Nm].
+    """
+    r = (r_earth + h) * 1000
+    V = sqrt(mu_earth / r)# Orbital velocity in [m/s]
+    delta_cp = L
+    Cd = 2.5
+    pho = 7.22e-12
+    
+    return 0.5 * pho * V**2 * A * Cd * delta_cp 
+
 ### CLASSES / OBJECTS
 
 ### MAIN
 if __name__ == "__main__":
     #print(solar_radiation_pressure_torque(0.01, .2, 0, 0.1))
-    print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
-    print(gravity_gradient_torque_alt(400, 2, 0.1))
+    #print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
+    #print(gravity_gradient_torque_alt(400, 2, 0.1))
+    print(aero_drag_torque(0.01, 0.1, 400))
