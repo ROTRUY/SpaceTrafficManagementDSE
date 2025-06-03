@@ -1,6 +1,7 @@
 ### IMPORTS
 import matplotlib.pyplot as plt
 from datetime import datetime
+from collections import defaultdict
 
 ### FUNCTIONS
 
@@ -103,6 +104,7 @@ GSCD65 = read_gsc('data/GSContactData65.txt')
 GSCD70 = read_gsc('data/GSContactData70.txt')
 GSCD80 = read_gsc('data/GSContactData80.txt')
 GSCD98 = read_gsc('data/GSContactData98.txt')
+GSCDyear = read_gsc('data/GroundStationContactData.txt')
 
 # Plot inclinations vs number of GSCD events
 gscd_lengths = [
@@ -149,6 +151,8 @@ total_duration65 = sum(GSCD65[2])
 total_duration70 = sum(GSCD70[2])
 total_duration80 = sum(GSCD80[2])
 total_duration98 = sum(GSCD98[2])
+total_durationyear = sum(GSCDyear[2])
+print(total_durationyear)
 
 # Convert total durations from seconds to hours
 total_durations = [
@@ -226,3 +230,43 @@ no_contact_lst = []
 
 #     plt.bar(x[:nr], GSCD[2][:nr])
 #     plt.show()
+
+def find_day_with_highest_total_contact(GSCD):
+    """
+    Finds the day with the highest total contact time (sum of durations) from the GSCD data.
+    Returns a tuple: (date, total_duration_in_seconds)
+    """
+    if not GSCD[0] or not GSCD[2]:
+        return None, None
+
+    day_totals = defaultdict(float)
+    for start_time, duration in zip(GSCD[0], GSCD[2]):
+        day = start_time.date()
+        day_totals[day] += duration
+
+    max_day = max(day_totals, key=day_totals.get)
+    return max_day, day_totals[max_day]
+
+def find_day_with_lowest_total_contact(GSCD):
+    """
+    Finds the day with the lowest total contact time (sum of durations) from the GSCD data.
+    Returns a tuple: (date, total_duration_in_seconds)
+    """
+    if not GSCD[0] or not GSCD[2]:
+        return None, None
+
+    day_totals = defaultdict(float)
+    for start_time, duration in zip(GSCD[0], GSCD[2]):
+        day = start_time.date()
+        day_totals[day] += duration
+
+    min_day = min(day_totals, key=day_totals.get)
+    return min_day, day_totals[min_day]
+
+# Example usage:
+highest_day, highest_total = find_day_with_highest_total_contact(GSCD60)
+print(f"Day with highest total contact: {highest_day}, Total duration (s): {highest_total:.2f}")
+
+lowest_day, lowest_total = find_day_with_lowest_total_contact(GSCD60)
+print(f"Day with lowest total contact: {lowest_day}, Total duration (s): {lowest_total:.2f}")
+
