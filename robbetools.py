@@ -155,4 +155,4 @@ def solar_radiation_pressure_torque(A_s: int|float, q: int|float, phi: int|float
 
 ### MAIN
 if __name__ == "__main__":
-    print(solar_radiation_pressure_torque(0.01, .2, 0, 0.1))
+    print(solar_radiation_pressure_torque(0.01, 1, 0, 0.1))
