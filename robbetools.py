@@ -133,52 +133,26 @@ def distance_sc_ground_earth(h: int|float) -> float:
     """
     return sqrt((r_earth + h) ** 2 - r_earth ** 2)
 
+def solar_radiation_pressure_torque(A_s: int|float, q: int|float, phi: int|float, d: int|float, Phi: int|float=1366) -> float:
+    """
+    Function to calculate disturbance torque on a satellite by solar radiation pressure.
+
+    Inputs
+    ---
+    - `A_s:` Sunlit surface area in [m²].
+    - `q:` Unitless reflectance factor (0 for perfect absorption to 1 for perfect reflection).
+    - `phi:` Angle of incidence of the sun in [deg].
+    - `d:` Distance between centre of mass and centre of solar radiation pressure in [m].
+    - `Phi:` Solar constant adjusted for distance from the sun in [W/m²]. Default: for Earth, 1366 [W/m²]
+
+    Outputs
+    ---
+    - `T_srp:` Disturbance torque due to solar radiation pressure in [Nm].
+    """
+    return Phi / c * A_s * (1 + q) * d * cos(phi*pi/180)
+
 ### CLASSES / OBJECTS
 
 ### MAIN
 if __name__ == "__main__":
-    periodlst = []
-    powerlst = []
-    dataAlst = []
-    dataBlst = []
-    dataClst = []
-    for T in range(30, 24*60*60+1):
-        periodlst.append(T)
-        powerlst.append(power_usage_sp(T))
-        dataAlst.append(data_generated('A') * 24*60*60/T)
-        dataBlst.append(data_generated('B') * 24*60*60/T)
-        dataClst.append(data_generated('C') * 24*60*60/T)
-    print(data_generated('A'), data_generated('B'), data_generated('C'))
-    
-    pltpower = True
-    if pltpower:
-        plt.plot(periodlst, powerlst)
-        plt.axvline(x = 60, linestyle='dashed', color='blue', label = '1min sampling period')
-        plt.axvline(x = 600, linestyle='dashed', color='red', label = '10min sampling period')
-        plt.axvline(x = 60*60, linestyle='dashed', color='purple', label = '1hr sampling period')
-        plt.axvline(x = 60*60*8, linestyle='dashed', color='orange', label = '8hr sampling period')
-        plt.legend()
-        plt.xscale('log')
-        plt.xlabel('Sampling period [s]')
-        plt.ylabel('Power usage [mW]')
-        plt.grid()
-        plt.tight_layout()
-        plt.savefig("plots/powerplot")
-        plt.close()
-
-    pltdata = True
-    if pltdata:
-        plt.plot(periodlst, dataAlst, label='Option A')
-        plt.plot(periodlst, dataBlst, label='Option B')
-        plt.plot(periodlst, dataClst, label='Option C')
-        plt.axvline(x = 60, linestyle='dashed', color='blue', label = '1min sampling period')
-        plt.axvline(x = 600, linestyle='dashed', color='red', label = '10min sampling period')
-        plt.axvline(x = 60*60, linestyle='dashed', color='purple', label = '1hr sampling period')
-        plt.axvline(x = 60*60*8, linestyle='dashed', color='orange', label = '8hr sampling period')
-        plt.legend()
-        plt.xscale('log')
-        plt.xlabel('Sampling period [s]')
-        plt.ylabel('Data generated per day [bits]')
-        plt.tight_layout()
-        plt.grid()
-        plt.savefig("plots/dataplot")
+    print(solar_radiation_pressure_torque(0.01, .2, 0, 0.1))
