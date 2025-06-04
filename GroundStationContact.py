@@ -105,6 +105,9 @@ GSCD70 = read_gsc('data/GSContactData70.txt')
 GSCD80 = read_gsc('data/GSContactData80.txt')
 GSCD98 = read_gsc('data/GSContactData98.txt')
 GSCDyear = read_gsc('data/GroundStationContactData.txt')
+GSCDMatera = read_gsc('data/GSContactData60Matera.txt')
+GSCDPotsdam = read_gsc('data/GSContactData60Potsdam.txt')
+
 
 # Plot inclinations vs number of GSCD events
 gscd_lengths = [
@@ -270,3 +273,65 @@ print(f"Day with highest total contact: {highest_day}, Total duration (s): {high
 lowest_day, lowest_total = find_day_with_lowest_total_contact(GSCD60)
 print(f"Day with lowest total contact: {lowest_day}, Total duration (s): {lowest_total:.2f}")
 
+def count_and_exclude_short_contacts(GSCD, station_name=""):
+    """
+    Counts and excludes contacts that are 30 seconds or less in duration from the GSCD data.
+    Prints the number of passes >= 30 seconds and states if any were removed.
+    Returns the filtered GSCD list.
+    """
+    filtered_GSCD = [[], [], []]
+    removed_count = 0
+
+    for start, end, duration in zip(GSCD[0], GSCD[1], GSCD[2]):
+        if duration > 30:
+            filtered_GSCD[0].append(start)
+            filtered_GSCD[1].append(end)
+            filtered_GSCD[2].append(duration)
+        else:
+            removed_count += 1
+
+    kept_count = len(filtered_GSCD[0])
+    print(f"{station_name}: Passes >= 30s: {kept_count}")
+    if removed_count > 0:
+        print(f"{station_name}: {removed_count} passes were removed (<= 30s).")
+    else:
+        print(f"{station_name}: No passes were removed.")
+
+    return filtered_GSCD
+
+# Example usage for Matera and Potsdam:
+filtered_Matera = count_and_exclude_short_contacts(GSCDMatera, "Matera")
+filtered_Potsdam = count_and_exclude_short_contacts(GSCDPotsdam, "Potsdam")
+print(f"Number of passes for Matera (>=30s): {len(filtered_Matera[0])}")
+print(f"Number of passes for Potsdam (>=30s): {len(filtered_Potsdam[0])}")
+
+def plot_filtered_contacts(GSCD, station_name):
+    """
+    Plots a graph with dates on the x-axis and contact durations (in seconds) on the y-axis for the given GSCD data.
+    Adds a red horizontal line at 30 seconds.
+    """
+    import matplotlib.dates as mdates
+
+    if not GSCD[0]:
+        print(f"No data to plot for {station_name}.")
+        return
+
+    dates = [dt.date() for dt in GSCD[0]]
+    durations = GSCD[2]
+
+    plt.figure(figsize=(10, 5))
+    plt.scatter(dates, durations, s=10, label='pass')
+    plt.axhline(30, color='red', linestyle='--', label='30 seconds')
+    plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+    plt.xlabel('Date')
+    plt.ylabel('Contact Duration (seconds)')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.legend(loc='lower left')  # Move legend to upper left
+    plt.grid(True)
+    plt.show()
+
+# Plot for Matera and Potsdam
+plot_filtered_contacts(filtered_Matera, "Matera")
+plot_filtered_contacts(filtered_Potsdam, "Potsdam")
