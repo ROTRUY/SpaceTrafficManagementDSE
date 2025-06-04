@@ -199,8 +199,9 @@ def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
     V = sqrt(mu_earth / r)# Orbital velocity in [m/s]
     delta_cp = L
     Cd = 2.5
-    rho = 7.22e-12 #ISA value for 300 km altitude in [kg/m³]
-    
+    rho1 = 7.22e-12 #ISA value for 300 km altitude in [kg/m³]
+    rho2 = 5.68e-13 #ISA value for 400 km altitude in [kg/m³]
+    rho = 1.51E-12 #ISA value for 360 km altitude in [kg/m³]
     return 0.5 * rho * V**2 * A * Cd * delta_cp 
 
 ### CLASSES / OBJECTS
@@ -210,4 +211,4 @@ if __name__ == "__main__":
     #print(solar_radiation_pressure_torque(0.01, .2, 0, 0.1))
     #print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
     #print(gravity_gradient_torque_alt(400, 2, 0.1))
-    print(aero_drag_torque(0.01, 0.1, 400))
+    print(aero_drag_torque(0.01, 0.1, 360))
