@@ -46,6 +46,9 @@ def read_file(file):
 
     return None  # If the line is not found
 
+GSCDcheck = read_gsc('GSCData/delft60.txt')
+print(sum(GSCDcheck[2]))  # Print the total duration of contacts in seconds
+
 number_of_events42 = read_file('data/GSContactData42.txt')
 number_of_events45 = read_file('data/GSContactData45.txt')
 number_of_events50 = read_file('data/GSContactData50.txt')
@@ -216,11 +219,17 @@ for inc, dur in zip(inclinations, total_durations):
 
 no_contact_lst = []
 # Get time between contacts
-#for i in range(len(GSCD[0])-1):
-#    no_contact = GSCD[0][i+1] - GSCD[1][i]
-#    no_contact_lst.append(no_contact)
+for i in range(len(GSCD60[0])-1):
+    no_contact = GSCD60[0][i+1] - GSCD60[1][i]
+    no_contact_lst.append(no_contact)
 
-#print(max(no_contact_lst))
+print("Maximum time between contacts:", max(no_contact_lst))
+# Calculate average time between contacts
+if no_contact_lst:
+    avg_no_contact = sum([td.total_seconds() for td in no_contact_lst]) / len(no_contact_lst)
+    print("Average time between contacts (seconds):", avg_no_contact)
+else:
+    print("No contact intervals found.")
 
 ### PLOTTERDEPLOT
 # plot = False
