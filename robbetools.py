@@ -199,7 +199,7 @@ def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
     V = sqrt(mu_earth / r)# Orbital velocity in [m/s]
     delta_cp = L
     Cd = 2.5
-    rho = 7.22e-12
+    rho = 7.22e-12 #ISA value for 300 km altitude in [kg/m³]
     
     return 0.5 * rho * V**2 * A * Cd * delta_cp 
 
