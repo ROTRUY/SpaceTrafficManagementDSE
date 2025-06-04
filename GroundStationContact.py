@@ -110,7 +110,9 @@ GSCD98 = read_gsc('data/GSContactData98.txt')
 GSCDyear = read_gsc('data/GroundStationContactData.txt')
 GSCDMatera = read_gsc('data/GSContactData60Matera.txt')
 GSCDPotsdam = read_gsc('data/GSContactData60Potsdam.txt')
+GSCD500 = read_gsc('GSCData500km/delft.txt')
 
+print('the longest pass is around', max(GSCD500[2]), 'seconds')  # Print the maximum duration of contacts in seconds for 500km
 
 # Plot inclinations vs number of GSCD events
 gscd_lengths = [
