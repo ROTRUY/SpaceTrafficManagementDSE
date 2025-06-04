@@ -52,7 +52,7 @@ print(sum(GSCDcheck[2]))  # Print the total duration of contacts in seconds
 number_of_events42 = read_file('GSCData500km/delft42.txt')
 number_of_events45 = read_file('GSCData500km/delft45.txt')
 number_of_events50 = read_file('GSCData500km/delft50.txt')
-#number_of_events55 = read_file('GSCData500km/delft55.txt')
+number_of_events55 = read_file('GSCData500km/delft55.txt')
 number_of_events58 = read_file('GSCData500km/delft58.txt')
 number_of_events59 = read_file('GSCData500km/delft59.txt')
 number_of_events60 = read_file('GSCData500km/delft60.txt')
@@ -65,12 +65,13 @@ number_of_events70 = read_file('GSCData500km/delft70.txt')
 number_of_events80 = read_file('GSCData500km/delft80.txt')
 number_of_events90 = read_file('GSCData500km/delft90.txt')
 number_of_events98 = read_file('GSCData500km/delft98.txt')
-inclinations = [42, 45, 50, 58,59, 60, 61, 62, 63, 64, 65, 70, 80,90, 98]  # Match the number of total_durations entries
+inclinations = [42, 45, 50,55, 58,59, 60, 61, 62, 63, 64, 65, 70, 80,90, 98]  # Match the number of total_durations entries
 # Print number of events table
 number_of_events = [
     number_of_events42,
     number_of_events45,
     number_of_events50,
+    number_of_events55,
     number_of_events58,
     number_of_events59, 
     number_of_events60,
@@ -96,7 +97,7 @@ for inc, num in zip(inclinations, number_of_events):
 GSCD42 = read_gsc('GSCData500km/delft42.txt')
 GSCD45 = read_gsc('GSCData500km/delft45.txt')
 GSCD50 = read_gsc('GSCData500km/delft50.txt')
-#GSCD55 = read_gsc('GSCData500km/delft55.txt')  # Not used in the original code
+GSCD55 = read_gsc('GSCData500km/delft55.txt')  # Not used in the original code
 GSCD55 = read_gsc('GSCData500km/delft57.txt')
 GSCD58 = read_gsc('GSCData500km/delft58.txt')
 GSCD59 = read_gsc('GSCData500km/delft59.txt')
@@ -122,6 +123,7 @@ gscd_lengths = [
     len(GSCD42[0]),
     len(GSCD45[0]),
     len(GSCD50[0]),
+    len(GSCD55[0]),
     len(GSCD58[0]),
     len(GSCD59[0]),
     len(GSCD60[0]),
@@ -150,7 +152,7 @@ plt.savefig("plots/VisitFreqIfoInc")
 total_duration42 = sum(GSCD42[2])
 total_duration45 = sum(GSCD45[2])
 total_duration50 = sum(GSCD50[2])
-#total_duration55 = sum(GSCD55[2])
+total_duration55 = sum(GSCD55[2])
 total_duration58 = sum(GSCD58[2])
 total_duration59 = sum(GSCD59[2])
 total_duration60 = sum(GSCD60[2])
@@ -171,7 +173,7 @@ total_durations = [
     total_duration42 / 3600,
     total_duration45 / 3600,
     total_duration50 / 3600,
-#    total_duration55 / 3600,
+    total_duration55 / 3600,
     total_duration58 / 3600,
     total_duration59 / 3600,
     total_duration60 / 3600,
@@ -202,7 +204,7 @@ total_durations = [
     total_duration42,
     total_duration45,
     total_duration50,
-#    total_duration55,
+    total_duration55,
     total_duration58,
     total_duration59,
     total_duration60,
