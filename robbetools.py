@@ -179,6 +179,16 @@ def gravity_gradient_torque_worst_case(L: int|float, m: int|float, h: int|float,
 def gravity_gradient_torque_alt(h: int|float, m: int|float, r: int|float) -> float:
     """
     Function to calculate worst-case gravity gradient torque
+
+    Inputs
+    ---
+    - `h:` Orbit altitude in [km].
+    - `m:` Spacecraft mass in [kg].
+    - `r:` Distance for moment of inertia in [m].
+
+    Outputs
+    ---
+    - `T_g:` Disturbance torque in [Nm].
     """
     return 3 * mu_earth / (2 * 1000 * (h + r_earth))**3 * m * r**2
 
@@ -234,3 +244,7 @@ if __name__ == "__main__":
     #print(gravity_gradient_torque_alt(400, 2, 0.1))
     #print(aero_drag_torque(0.02, 0.1, 360))
     print(min_dipol_moment(pi/12))
+    print(solar_radiation_pressure_torque(0.02, .2, 0, 0.1))
+    print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
+    print(gravity_gradient_torque_alt(400, 2, 0.1))
+    print(aero_drag_torque(0.01, 0.1, 360))
