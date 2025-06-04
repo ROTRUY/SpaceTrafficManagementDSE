@@ -202,7 +202,28 @@ def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
     rho1 = 7.22e-12 #ISA value for 300 km altitude in [kg/m³]
     rho2 = 5.68e-13 #ISA value for 400 km altitude in [kg/m³]
     rho = 1.51E-12 #ISA value for 360 km altitude in [kg/m³]
-    return 0.5 * rho * V**2 * A * Cd * delta_cp 
+    print(V)
+    return 0.5 * rho * V**2 * A * Cd * delta_cp
+
+def min_dipol_moment(beta_min: int|float) -> float:
+    """
+    Function to calculate the minimum dipole moment of a magnetometer.
+
+    Inputs
+    ---
+    - `beta_min:` Desired pointing accuracy [rad].
+    
+    Outputs
+    ---
+    - `m_min:` Minimum dipole moment in [A m²].
+    """
+    Ts = solar_radiation_pressure_torque(0.02, 0.2, 0, 0.1)
+    Tg = gravity_gradient_torque_alt(400, 2, 0.1)
+    Ta = aero_drag_torque(0.02, 0.1, 360)
+    
+    Trms = sqrt(Ts**2 + Tg**2 + Ta**2)  # Total disturbance torque in [Nm]
+    Bmin = 2e-5 # Minimum magnetic field strength in [T] (worst case)
+    return 10 * Trms / Bmin / sin(beta_min)  # [A m²] This is a typical value for small magnetometers used in CubeSats.
 
 ### CLASSES / OBJECTS
 
@@ -211,4 +232,5 @@ if __name__ == "__main__":
     #print(solar_radiation_pressure_torque(0.01, .2, 0, 0.1))
     #print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
     #print(gravity_gradient_torque_alt(400, 2, 0.1))
-    print(aero_drag_torque(0.01, 0.1, 360))
+    #print(aero_drag_torque(0.02, 0.1, 360))
+    print(min_dipol_moment(pi/12))
