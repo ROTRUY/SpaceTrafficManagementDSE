@@ -166,13 +166,13 @@ def gravity_gradient_torque_worst_case(L: int|float, m: int|float, h: int|float,
     ---
     - `T_gg:` Worst case gravity gradient torque in [Nm].
     """
-    r = r_earth + h  # Distance from the center of the earth to the satellite in [m]
+    r = (r_earth + h) * 1000  # Distance from the center of the earth to the satellite in [m]
     
     if theta is None:
         return max(gravity_gradient_torque_worst_case(L, m, h, theta=theta) for theta in [n/10 for n in range(0, 70)])  # Calculate the maximum torque over all angles
         
-    F1 = mu_earth * m / 2 / (1000 * (r - L * cos(theta) / 2))**2
-    F2 = mu_earth * m / 2 / (1000 * (r + L * cos(theta) / 2))**2
+    F1 = mu_earth * m / 2 / (r - L * cos(theta) / 2)**2
+    F2 = mu_earth * m / 2 / (r + L * cos(theta) / 2)**2
     
     return (F1 - F2) * L * sin(theta) / 2  # Torque in [Nm]. The factor of 2 is because the torque is calculated for the center of mass, not the center of the satellite.
 
