@@ -7,7 +7,7 @@ import numpy as np
 #--------------------------------------------------------------------
 
 
-P_sun = 1367  #Solar flux at 1 au in W/m^2
+P_sun = 1322  #Solar flux at 1 au in W/m^2
 t_mis = 6  #Mission duration in months
 
 #Orbit Values 
@@ -20,8 +20,8 @@ theta = 0  #Incidence angle of the solar arrays
 
 #Power Requirements
 
-P_day_avg = 1.04525
-P_ecl_avg = 1.04525
+P_day_avg = 1.05
+P_ecl_avg = 1.05
 
 #Solar Cell Properties
 

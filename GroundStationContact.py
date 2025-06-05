@@ -49,22 +49,23 @@ def read_file(file):
 GSCDcheck = read_gsc('GSCData/delft60.txt')
 print(sum(GSCDcheck[2]))  # Print the total duration of contacts in seconds
 
-number_of_events42 = read_file('data/GSContactData42.txt')
-number_of_events45 = read_file('data/GSContactData45.txt')
-number_of_events50 = read_file('data/GSContactData50.txt')
-number_of_events55 = read_file('data/GSContactData55.txt')
-number_of_events58 = read_file('data/GSContactData58.txt')
-number_of_events59 = read_file('data/GSContactData59.txt')
-number_of_events60 = read_file('data/GSContactData60.txt')
-number_of_events61 = read_file('data/GSContactData61.txt')
-number_of_events62 = read_file('data/GSContactData62.txt')
-number_of_events63 = read_file('data/GSContactData63.txt')
-number_of_events64 = read_file('data/GSContactData64.txt')
-number_of_events65 = read_file('data/GSContactData65.txt')
-number_of_events70 = read_file('data/GSContactData50.txt')
-number_of_events80 = read_file('data/GSContactData50.txt')
-number_of_events98 = read_file('data/GSContactData98.txt')
-inclinations = [42, 45, 50, 55, 58,59, 60, 61, 62, 63, 64, 65, 70, 80, 98]  # Match the number of total_durations entries
+number_of_events42 = read_file('GSCData500km/delft42.txt')
+number_of_events45 = read_file('GSCData500km/delft45.txt')
+number_of_events50 = read_file('GSCData500km/delft50.txt')
+number_of_events55 = read_file('GSCData500km/delft55.txt')
+number_of_events58 = read_file('GSCData500km/delft58.txt')
+number_of_events59 = read_file('GSCData500km/delft59.txt')
+number_of_events60 = read_file('GSCData500km/delft60.txt')
+number_of_events61 = read_file('GSCData500km/delft61.txt')
+number_of_events62 = read_file('GSCData500km/delft62.txt')
+number_of_events63 = read_file('GSCData500km/delft63.txt')
+number_of_events64 = read_file('GSCData500km/delft64.txt')
+number_of_events65 = read_file('GSCData500km/delft65.txt')
+number_of_events70 = read_file('GSCData500km/delft70.txt')
+number_of_events80 = read_file('GSCData500km/delft80.txt')
+number_of_events90 = read_file('GSCData500km/delft90.txt')
+number_of_events98 = read_file('GSCData500km/delft98.txt')
+inclinations = [42, 45, 50,55, 58,59, 60, 61, 62, 63, 64, 65, 70, 80,90, 98]  # Match the number of total_durations entries
 # Print number of events table
 number_of_events = [
     number_of_events42,
@@ -81,6 +82,7 @@ number_of_events = [
     number_of_events65,
     number_of_events70,
     number_of_events80,
+    number_of_events90,
     number_of_events98
 ]
 
@@ -92,25 +94,29 @@ for inc, num in zip(inclinations, number_of_events):
 
 ### MAIN
 # Read data, save into list of lists
-GSCD42 = read_gsc('data/GSContactData42.txt')
-GSCD45 = read_gsc('data/GSContactData45.txt')
-GSCD50 = read_gsc('data/GSContactData50.txt')
-GSCD55 = read_gsc('data/GSContactData55.txt')
-GSCD58 = read_gsc('data/GSContactData58.txt')
-GSCD59 = read_gsc('data/GSContactData59.txt')
-GSCD60 = read_gsc('data/GSContactData60.txt')
-GSCD61 = read_gsc('data/GSContactData61.txt')
-GSCD62 = read_gsc('data/GSContactData62.txt')
-GSCD63 = read_gsc('data/GSContactData63.txt')
-GSCD64 = read_gsc('data/GSContactData64.txt')  
-GSCD65 = read_gsc('data/GSContactData65.txt')
-GSCD70 = read_gsc('data/GSContactData70.txt')
-GSCD80 = read_gsc('data/GSContactData80.txt')
-GSCD98 = read_gsc('data/GSContactData98.txt')
-GSCDyear = read_gsc('data/GroundStationContactData.txt')
-GSCDMatera = read_gsc('data/GSContactData60Matera.txt')
-GSCDPotsdam = read_gsc('data/GSContactData60Potsdam.txt')
+GSCD42 = read_gsc('GSCData500km/delft42.txt')
+GSCD45 = read_gsc('GSCData500km/delft45.txt')
+GSCD50 = read_gsc('GSCData500km/delft50.txt')
+GSCD55 = read_gsc('GSCData500km/delft55.txt')  # Not used in the original code
+GSCD55 = read_gsc('GSCData500km/delft57.txt')
+GSCD58 = read_gsc('GSCData500km/delft58.txt')
+GSCD59 = read_gsc('GSCData500km/delft59.txt')
+GSCD60 = read_gsc('GSCData500km/delft60.txt')
+GSCD61 = read_gsc('GSCData500km/delft61.txt')
+GSCD62 = read_gsc('GSCData500km/delft62.txt')
+GSCD63 = read_gsc('GSCData500km/delft63.txt')
+GSCD64 = read_gsc('GSCData500km/delft64.txt')
+GSCD65 = read_gsc('GSCData500km/delft65.txt')
+GSCD70 = read_gsc('GSCData500km/delft70.txt')
+GSCD80 = read_gsc('GSCData500km/delft80.txt')
+GSCD90 = read_gsc('GSCData500km/delft90.txt')
+GSCD98 = read_gsc('GSCData500km/delft98.txt')
+#GSCDyear = read_gsc('GSCData500km/delft_year.txt')
+GSCDMatera = read_gsc('GSCData500km/matera.txt')
+GSCDPotsdam = read_gsc('GSCData500km/potsdam.txt')
 
+
+print('the longest pass is around', max(GSCD60[2]), 'seconds')  # Print the maximum duration of contacts in seconds for 500km
 
 # Plot inclinations vs number of GSCD events
 gscd_lengths = [
@@ -128,6 +134,7 @@ gscd_lengths = [
     len(GSCD65[0]),
     len(GSCD70[0]),
     len(GSCD80[0]),
+    len(GSCD90[0]),
     len(GSCD98[0])
 ]
 
@@ -156,9 +163,10 @@ total_duration64 = sum(GSCD64[2])
 total_duration65 = sum(GSCD65[2])
 total_duration70 = sum(GSCD70[2])
 total_duration80 = sum(GSCD80[2])
+total_duration90 = sum(GSCD90[2])
 total_duration98 = sum(GSCD98[2])
-total_durationyear = sum(GSCDyear[2])
-print(total_durationyear)
+#total_durationyear = sum(GSCDyear[2])
+#print(total_durationyear)
 
 # Convert total durations from seconds to hours
 total_durations = [
@@ -176,6 +184,7 @@ total_durations = [
     total_duration65 / 3600,
     total_duration70 / 3600,
     total_duration80 / 3600,
+    total_duration90 / 3600,
     total_duration98 / 3600
 ]
 
@@ -206,6 +215,7 @@ total_durations = [
     total_duration65,
     total_duration70,
     total_duration80,
+    total_duration90,
     total_duration98
 ]
 
@@ -217,13 +227,27 @@ for inc, dur in zip(inclinations, total_durations):
 
 
 
-no_contact_lst = []
-# Get time between contacts
-for i in range(len(GSCD60[0])-1):
-    no_contact = GSCD60[0][i+1] - GSCD60[1][i]
-    no_contact_lst.append(no_contact)
+def calculate_contact_gaps(GSCD):
+    """
+    Calculates the time gaps between consecutive contacts.
+    Returns a list of timedeltas, the maximum gap, and the minimum gap.
+    """
+    no_contact_lst = []
+    for i in range(len(GSCD[0]) - 1):
+        no_contact = GSCD[0][i + 1] - GSCD[1][i]
+        no_contact_lst.append(no_contact)
+    if no_contact_lst:
+        max_gap = max(no_contact_lst)
+        min_gap = min(no_contact_lst)
+    else:
+        max_gap = None
+        min_gap = None
+    return no_contact_lst, max_gap, min_gap
 
-print("Maximum time between contacts:", max(no_contact_lst))
+# Calculate gaps for GSCD60
+no_contact_lst, max_gap, min_gap = calculate_contact_gaps(GSCD60)
+
+print("Maximum time between contacts:", max_gap, "and minimum time between contacts:", min_gap)
 # Calculate average time between contacts
 if no_contact_lst:
     avg_no_contact = sum([td.total_seconds() for td in no_contact_lst]) / len(no_contact_lst)
@@ -314,6 +338,16 @@ filtered_Potsdam = count_and_exclude_short_contacts(GSCDPotsdam, "Potsdam")
 print(f"Number of passes for Matera (>=30s): {len(filtered_Matera[0])}")
 print(f"Number of passes for Potsdam (>=30s): {len(filtered_Potsdam[0])}")
 
+# Print durations of excluded passes for Matera
+print("Matera: Durations of excluded passes (<=30s):")
+for duration in [d for d in GSCDMatera[2] if d <= 30]:
+    print(f"{duration:.2f} seconds")
+
+# Print durations of excluded passes for Potsdam
+print("Potsdam: Durations of excluded passes (<=30s):")
+for duration in [d for d in GSCDPotsdam[2] if d <= 30]:
+    print(f"{duration:.2f} seconds")
+
 def plot_filtered_contacts(GSCD, station_name):
     """
     Plots a graph with dates on the x-axis and contact durations (in seconds) on the y-axis for the given GSCD data.
@@ -330,7 +364,6 @@ def plot_filtered_contacts(GSCD, station_name):
 
     plt.figure(figsize=(10, 5))
     plt.scatter(dates, durations, s=10, label='pass')
-    plt.axhline(30, color='red', linestyle='--', label='30 seconds')
     plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     plt.xlabel('Date')
