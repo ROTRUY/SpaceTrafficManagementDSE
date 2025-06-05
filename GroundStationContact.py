@@ -227,13 +227,27 @@ for inc, dur in zip(inclinations, total_durations):
 
 
 
-no_contact_lst = []
-# Get time between contacts
-for i in range(len(GSCD60[0])-1):
-    no_contact = GSCD60[0][i+1] - GSCD60[1][i]
-    no_contact_lst.append(no_contact)
+def calculate_contact_gaps(GSCD):
+    """
+    Calculates the time gaps between consecutive contacts.
+    Returns a list of timedeltas, the maximum gap, and the minimum gap.
+    """
+    no_contact_lst = []
+    for i in range(len(GSCD[0]) - 1):
+        no_contact = GSCD[0][i + 1] - GSCD[1][i]
+        no_contact_lst.append(no_contact)
+    if no_contact_lst:
+        max_gap = max(no_contact_lst)
+        min_gap = min(no_contact_lst)
+    else:
+        max_gap = None
+        min_gap = None
+    return no_contact_lst, max_gap, min_gap
 
-print("Maximum time between contacts:", max(no_contact_lst))
+# Calculate gaps for GSCD60
+no_contact_lst, max_gap, min_gap = calculate_contact_gaps(GSCD60)
+
+print("Maximum time between contacts:", max_gap, "and minimum time between contacts:", min_gap)
 # Calculate average time between contacts
 if no_contact_lst:
     avg_no_contact = sum([td.total_seconds() for td in no_contact_lst]) / len(no_contact_lst)
@@ -324,6 +338,16 @@ filtered_Potsdam = count_and_exclude_short_contacts(GSCDPotsdam, "Potsdam")
 print(f"Number of passes for Matera (>=30s): {len(filtered_Matera[0])}")
 print(f"Number of passes for Potsdam (>=30s): {len(filtered_Potsdam[0])}")
 
+# Print durations of excluded passes for Matera
+print("Matera: Durations of excluded passes (<=30s):")
+for duration in [d for d in GSCDMatera[2] if d <= 30]:
+    print(f"{duration:.2f} seconds")
+
+# Print durations of excluded passes for Potsdam
+print("Potsdam: Durations of excluded passes (<=30s):")
+for duration in [d for d in GSCDPotsdam[2] if d <= 30]:
+    print(f"{duration:.2f} seconds")
+
 def plot_filtered_contacts(GSCD, station_name):
     """
     Plots a graph with dates on the x-axis and contact durations (in seconds) on the y-axis for the given GSCD data.
@@ -340,7 +364,6 @@ def plot_filtered_contacts(GSCD, station_name):
 
     plt.figure(figsize=(10, 5))
     plt.scatter(dates, durations, s=10, label='pass')
-    plt.axhline(30, color='red', linestyle='--', label='30 seconds')
     plt.gca().xaxis.set_major_locator(mdates.AutoDateLocator())
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
     plt.xlabel('Date')
