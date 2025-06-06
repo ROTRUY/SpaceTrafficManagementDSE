@@ -5,16 +5,16 @@ import matplotlib.pyplot as plt
 
 ##################### Variable Initialization ########################################
 
-ADCS_power_nominal = 0.0        # ADCS nominal consumption (W) when NOT in ground pass
+ADCS_power_nominal = 0.05        # ADCS nominal consumption (W) when NOT in ground pass
 CDH_power_nominal = 0.3        # C&DH nominal consumption outside ground pass (W)
 CDH_power_ground = 6.0          # C&DH consumption during a ground pass (W)
-verification_power = 0.125      # Verification‐payload nominal consumption (W)
-payload_power = 0.032
-solar_generation_power = 1
-Battery_size = 5 #Watt hours
+verification_power = 0.25      # Verification‐payload nominal consumption (W)
+payload_power = 0.1
+solar_generation_power = 1.5 #Assuming a lot less than maximum for worst case
+Battery_size = 8 #Watt hours, 8 to account for DoD
 Battery_Capacity = Battery_size * 3600 # Joules
 
-Constant_Power = CDH_power_nominal + verification_power + payload_power
+Constant_Power = CDH_power_nominal + verification_power + payload_power + ADCS_power_nominal
 
 ####### Function to go from a time array to check and a value array to a boolean array ######
 
@@ -48,7 +48,8 @@ Power_Total = -Constant_Power + EPSChargingArray + GroundStationDischargeArray
 ############################## Find Array with battery capacity #################################
 
 #add battery size in joules. Because the timestep is one second, the wattages is the same as the energy per timestep
-#Use np.clip to make sure the battery charge stays between 0 and max
+#Overshoot and undershoot are needed, to clamp the battery capacity between 0 and max
+
 Battery_Charge_Raw = Battery_Capacity + np.cumsum(Power_Total)
 overshoot = np.maximum.accumulate(np.maximum(Battery_Charge_Raw - Battery_Capacity, 0.0))
 
