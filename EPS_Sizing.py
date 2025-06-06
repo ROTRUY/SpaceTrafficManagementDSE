@@ -12,8 +12,8 @@ t_mis = 6  #Mission duration in months
 
 #Orbit Values 
 
-t_day = 56.364  #Day time in minutes
-t_ecl = 36.036  #Eclipse time in minutes
+t_day = 58.768  #Day time in minutes
+t_ecl = 35.699  #Eclipse time in minutes
 t_orb = t_day + t_ecl  #Orbit time in minutes
 
 theta = 0  #Incidence angle of the solar arrays 
