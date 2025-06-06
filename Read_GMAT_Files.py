@@ -1,3 +1,5 @@
+#This file contains 2 helper functions to read eclipse data and ground pass data from GMAT into pandas dataframes
+
 import pandas as pd
 
 def Get_Eclipse_Data(fileName):
