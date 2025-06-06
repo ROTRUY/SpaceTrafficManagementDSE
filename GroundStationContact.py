@@ -112,8 +112,8 @@ GSCD80 = read_gsc('GSCData500km/delft80.txt')
 GSCD90 = read_gsc('GSCData500km/delft90.txt')
 GSCD98 = read_gsc('GSCData500km/delft98.txt')
 #GSCDyear = read_gsc('GSCData500km/delft_year.txt')
-GSCDMatera = read_gsc('GSCData500km/matera.txt')
-GSCDPotsdam = read_gsc('GSCData500km/potsdam.txt')
+GSCDMatera = read_gsc('GSCData-500km-21Mar/matera60.txt')
+GSCDPotsdam = read_gsc('GSCData-500km-21Mar/potsdam60.txt')
 
 
 print('the longest pass is around', max(GSCD60[2]), 'seconds')  # Print the maximum duration of contacts in seconds for 500km

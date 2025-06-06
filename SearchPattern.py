@@ -4,7 +4,7 @@ from math import ceil, sqrt
 import pandas as pd
 
 # Parameters
-R_large = 706.5  # Radius of the large circle in meters
+R_large = 500  # Radius of the large circle in meters
 R_small = 260  # Radius of the small circles in meters
 D_large = 2 * R_large  # Diameter of the large circle
 
@@ -22,11 +22,11 @@ num_rows_overlap = ceil(D_large / dy_overlap) + 1
 circle_centers_overlap = []
 
 for j in range(num_rows_overlap):
-    y = -R_large + 110 + j * dy_overlap
+    y = -R_large + 100 + j * dy_overlap
     row_offset = (j % 2) * (dx_overlap / 2)  # Stagger every other row
     num_cols = ceil(D_large / dx_overlap) + 1
     for i in range(num_cols):
-        x = -R_large -70 + row_offset + i * dx_overlap
+        x = -R_large - 170 + row_offset + i * dx_overlap
         # Ensure the small circle covers part of the large circle
         if sqrt(x**2 + y**2) <= R_large + R_small:
             circle_centers_overlap.append((x, y))
