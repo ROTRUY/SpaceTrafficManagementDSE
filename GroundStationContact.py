@@ -114,7 +114,7 @@ GSCD98 = read_gsc('GSCData500km/delft98.txt')
 #GSCDyear = read_gsc('GSCData500km/delft_year.txt')
 GSCDMatera = read_gsc('GSCData-500km-21Mar/matera60.txt')
 GSCDPotsdam = read_gsc('GSCData-500km-21Mar/potsdam60.txt')
-
+GSCDdelft60 = read_gsc('GSCData-500km-21Mar/delft60.txt')
 
 print('the longest pass is around', max(GSCD60[2]), 'seconds')  # Print the maximum duration of contacts in seconds for 500km
 
@@ -306,6 +306,19 @@ print(f"Day with highest total contact: {highest_day}, Total duration (s): {high
 lowest_day, lowest_total = find_day_with_lowest_total_contact(GSCD60)
 print(f"Day with lowest total contact: {lowest_day}, Total duration (s): {lowest_total:.2f}")
 
+def average_contact_duration(GSCD):
+    """
+    Calculates the average contact duration from the GSCD data.
+    Returns the average duration in seconds.
+    """
+    if not GSCD[2]:  # Check if there are any durations
+        return 0.0
+    return sum(GSCD[2]) / len(GSCD[2])
+
+average_time = average_contact_duration(GSCDdelft60)
+print(average_time)
+
+
 def count_and_exclude_short_contacts(GSCD, station_name=""):
     """
     Counts and excludes contacts that are 30 seconds or less in duration from the GSCD data.
@@ -377,3 +390,17 @@ def plot_filtered_contacts(GSCD, station_name):
 # Plot for Matera and Potsdam
 plot_filtered_contacts(filtered_Matera, "Matera")
 plot_filtered_contacts(filtered_Potsdam, "Potsdam")
+
+def average_contact_SLR(GSCD):
+    """
+    Calculates the average contact duration from the GSCD data, excluding short contacts.
+    Returns the average duration in seconds.
+    """
+    if not GSCD[2]:  # Check if there are any durations
+        return 0.0
+    return sum(GSCD[2]) / len(GSCD[2])
+
+average_time_SLR_Matera = average_contact_SLR(filtered_Matera)
+print(f"Average contact duration (SLR) for Matera: {average_time_SLR_Matera:.2f} seconds")
+average_time_SLR_Potsdam = average_contact_SLR(filtered_Potsdam)
+print(f"Average contact duration (SLR) for Potsdam: {average_time_SLR_Potsdam:.2f} seconds")
