@@ -281,85 +281,6 @@ def magneticstuff_robbe():
     print("================================")
     return
 
-def Bmax_mumetal() -> float:
-    """
-    Function to calculate the maximum magnetic field strength of a mumetal shield.
-
-    Outputs
-    ---
-    - `Bmax:` Maximum magnetic field strength in [T].
-    """
-    
-    mu0 = 4 * pi * 1e-7  # Permeability of free space [T m/A]
-    Nd = (100 * 4 / sqrt(pi) + 2) ** -1
-    Ha = 25
-    Hmax = 0
-    Bmax = (Ha - Hmax) * mu0 / Nd
-    
-    return Bmax # [T] This is a typical value for mumetal shields.
-
-def settling_time(n: int, L: int|float, D: int|float, omega0=pi/180*12.5, omega_end=pi/180*2.5, I = 0.001 )-> int|float: #old esimation for I=2/3 * 2 * 0.1 ** 2
-    """
-    Function to calculate the settling time of a system.
-
-    Outputs
-    ---
-    - `t_s:` Settling time in [s].
-    """
-    eta = 12 #for mumetal
-    m = 1.97 #for mumetal
-    Bmax = Bmax_mumetal()
-    print("I deltaOmega " + str(I * (omega0 - omega_end)))
-    print("A1: " + str(pi * (D / 2) ** 2))
-    
-    Whm = eta * Bmax ** m
-    Wh = 0.6 * Whm * L * pi * (D / 2) ** 2 * n
-    
-    print("whm: " + str(Whm))
-    
-    t = 2 * pi * I / Wh * (omega0 - omega_end)
-    return t
-
-def settling_time_C3(n: int, L=0.07, A=11*10**-6)-> int|float:
-    """
-    Function to calculate the settling time of a system.
-
-    Outputs
-    ---
-    - `t_s:` Settling time in [s].
-    """
-    eta = 13 #for permenorm
-    m = 1.35 #for permenorm
-    Bmax = 0.0125
-    
-    Whm = eta * Bmax ** m
-    Wh = 0.6 * Whm * L * A * n
-    
-    print("whm: " + str(Whm))
-    
-    t = 2 * pi / Wh * 0.0027  # 0.0027 is the I deltaOmega value for C3
-    return t #should come out to 86 days
-
-def settling_timeGerhard(n: int, L: int|float, D: int|float, omega0=pi/180*12.5, omega_end=pi/180*2.5, I=0.0954)-> int|float:
-    """
-    Function to calculate the settling time of a system.
-
-    Outputs
-    ---
-    - `t_s:` Settling time in [s].
-    """
-    eta = 12 #for mumetal
-    m = 1.97 #for mumetal
-    Bmax = 0.0125
-    print("I deltaOmega " + str(I * (omega0 - omega_end)))
-    print("A: " + str(pi * (D / 2) ** 2))
-    Whm = eta * Bmax ** m
-    Wh = 0.6 * Whm * L * pi * (D / 2) ** 2 * n
-    
-    t = 2 * pi * I / Wh * (omega0 - omega_end)
-    return t
-    
-
 ### CLASSES / OBJECTS
 
 ### MAIN
@@ -370,12 +291,5 @@ if __name__ == "__main__":
     # print(gravity_gradient_torque_alt(400, 2, 0.1))
     # print(aero_drag_torque(0.02, 0.1, 360))
     magneticstuff_robbe()
-    print(Bmax_mumetal())
-    print("Settling time: " + str(settling_time(1, 0.085, 0.00085)/60/60/24) + " days")
-    print("Settling time C3: " + str(settling_time_C3(2)/60/60/24) + " days")
-    print("Settling time Gerhard: " + str(settling_timeGerhard(2, 0.095, 0.001)/60/60/24) + " days")
-    # print(aero_drag_torque(0.02, 0.02, 360))
-    # print(Bmax_mumetal())
-    # print("Settling time: " + str(settling_time(1, 0.085, 0.00085)/60/60/24) + " days")
-    # print("Settling time C3: " + str(settling_time_C3(2)/60/60/24) + " days")
-    # print("Settling time Gerhard: " + str(settling_timeGerhard(2, 0.095, 0.001)/60/60/24) + " days")
+
+    
