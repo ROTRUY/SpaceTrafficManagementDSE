@@ -293,8 +293,8 @@ def magneticstuff_gerhard():
 
     # ASSUMED VALUES
     e = 95  # elongation
-    L = 9.5e-2  # m
-    r = 1.00e-3  # m
+    L = 9.5e-2  # [m]
+    r = 1.00e-3  # [m]
     V = L * pi * r**2
 
     Nd = (4.02 * log10(e) - 0.185) / 2 / e**2
@@ -311,7 +311,7 @@ def magneticstuff_gerhard():
 
     omega0 = 12.5*pi/180  
     omega = 2.5*pi/180  
-    I = 0.018  # Moment of inertia Assumption
+    I = 0.018  # Moment of inertia ! Assumption !
 
     td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
     td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
@@ -324,16 +324,34 @@ def magneticstuff_gerhard():
     print("================================")
     return
 
-### CLASSES / OBJECTS
+def natural_frequency():
+    rho = 2.70  # [g/cm³]
+    m = 120  # [g]
+    Lt = 10  # [cm]
+    t = (Lt - sqrt(Lt**2 - m / rho / Lt)) / 2 *1e-3  # [m]
+
+    Em = 71e+9  # Young's modulus of structural material [Pa]
+    L = 0.1  # [m]
+    A_lat = L**2  # [m²]
+    As = A_lat - (L - 2 * t)**2  # [m²]
+    ms = 1.2  # [kg]
+    I = (L**4 - (L - 2 * t)**4) / 12
+
+    Es = Em * As / A_lat
+
+    fnlong = sqrt(Es * A_lat /( ms * L)) / (2 * pi)
+    fnlat = sqrt(3 * Es * I / (ms * L**3)) / (2 * pi)
+    return t, A_lat, As, Es, I, fnlong, fnlat
 
 ### MAIN
 if __name__ == "__main__":
-    print("min dipole:" + str(min_dipol_moment(pi/180 * 10)))
+    # print("min dipole:" + str(min_dipol_moment(pi/180 * 10)))
     # print(solar_radiation_pressure_torque(0.02, .2, 0, 0.02))
     # print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
     # print(gravity_gradient_torque_alt(400, 2, 0.1))
     # print(aero_drag_torque(0.02, 0.1, 360))
-    magneticstuff_robbe()
-    magneticstuff_gerhard()
+    # magneticstuff_robbe()
+    # magneticstuff_gerhard()
+    print(natural_frequency())
 
     
