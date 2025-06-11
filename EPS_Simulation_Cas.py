@@ -6,11 +6,11 @@ import matplotlib.pyplot as plt
 ##################### Variable Initialization ########################################
 
 ADCS_power_nominal = 0.05        # ADCS nominal consumption (W) when NOT in ground pass
-CDH_power_nominal = 0.3        # C&DH nominal consumption outside ground pass (W)
+CDH_power_nominal = 0.35        # C&DH nominal consumption outside ground pass (W)
 CDH_power_ground = 6.0          # C&DH consumption during a ground pass (W)
-verification_power = 0.25      # Verification‐payload nominal consumption (W)
+verification_power = 0.5      # Verification‐payload nominal consumption (W)
 payload_power = 0.1
-solar_generation_power = 1.5 #Assuming a lot less than maximum for worst case
+solar_generation_power = 2 #Assuming a lot less than maximum for worst case
 Battery_size = 8 #Watt hours, 8 to account for DoD
 Battery_Capacity = Battery_size * 3600 # Joules
 
