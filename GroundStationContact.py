@@ -115,6 +115,7 @@ GSCD98 = read_gsc('GSCData500km/delft98.txt')
 GSCDMatera = read_gsc('GSCData-500km-21Mar/matera60.txt')
 GSCDPotsdam = read_gsc('GSCData-500km-21Mar/potsdam60.txt')
 GSCDdelft60 = read_gsc('GSCData-500km-21Mar/delft60.txt')
+GSCDGraz = read_gsc('GSCData-500km-21Mar/graz60.txt')
 
 print('the longest pass is around', max(GSCD60[2]), 'seconds')  # Print the maximum duration of contacts in seconds for 500km
 
@@ -165,6 +166,7 @@ total_duration70 = sum(GSCD70[2])
 total_duration80 = sum(GSCD80[2])
 total_duration90 = sum(GSCD90[2])
 total_duration98 = sum(GSCD98[2])
+
 #total_durationyear = sum(GSCDyear[2])
 #print(total_durationyear)
 
@@ -315,7 +317,7 @@ def average_contact_duration(GSCD):
         return 0.0
     return sum(GSCD[2]) / len(GSCD[2])
 
-average_time = average_contact_duration(GSCDdelft60)
+average_time = average_contact_duration(GSCDGraz)
 print(average_time)
 
 
@@ -348,8 +350,10 @@ def count_and_exclude_short_contacts(GSCD, station_name=""):
 # Example usage for Matera and Potsdam:
 filtered_Matera = count_and_exclude_short_contacts(GSCDMatera, "Matera")
 filtered_Potsdam = count_and_exclude_short_contacts(GSCDPotsdam, "Potsdam")
+filtered_Graz = count_and_exclude_short_contacts(GSCDGraz, "Graz")
 print(f"Number of passes for Matera (>=30s): {len(filtered_Matera[0])}")
 print(f"Number of passes for Potsdam (>=30s): {len(filtered_Potsdam[0])}")
+print(f"Number of passes for Graz (>=30s): {len(filtered_Graz[0])}")
 
 # Print durations of excluded passes for Matera
 print("Matera: Durations of excluded passes (<=30s):")
@@ -359,6 +363,10 @@ for duration in [d for d in GSCDMatera[2] if d <= 30]:
 # Print durations of excluded passes for Potsdam
 print("Potsdam: Durations of excluded passes (<=30s):")
 for duration in [d for d in GSCDPotsdam[2] if d <= 30]:
+    print(f"{duration:.2f} seconds")
+
+print("Graz: Durations of excluded passes (<=30s):")
+for duration in [d for d in GSCDGraz[2] if d <= 30]:
     print(f"{duration:.2f} seconds")
 
 def plot_filtered_contacts(GSCD, station_name):
@@ -390,6 +398,7 @@ def plot_filtered_contacts(GSCD, station_name):
 # Plot for Matera and Potsdam
 plot_filtered_contacts(filtered_Matera, "Matera")
 plot_filtered_contacts(filtered_Potsdam, "Potsdam")
+plot_filtered_contacts(filtered_Graz, "Graz")
 
 def average_contact_SLR(GSCD):
     """
@@ -404,3 +413,5 @@ average_time_SLR_Matera = average_contact_SLR(filtered_Matera)
 print(f"Average contact duration (SLR) for Matera: {average_time_SLR_Matera:.2f} seconds")
 average_time_SLR_Potsdam = average_contact_SLR(filtered_Potsdam)
 print(f"Average contact duration (SLR) for Potsdam: {average_time_SLR_Potsdam:.2f} seconds")
+average_time_SLR_Graz = average_contact_SLR(filtered_Graz)
+print(f"Average contact duration (SLR) for Graz: {average_time_SLR_Graz:.2f} seconds")
