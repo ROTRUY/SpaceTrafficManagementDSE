@@ -240,28 +240,46 @@ def min_dipol_moment(beta_min: int|float) -> float:
     return 10 * Trms / Bmin / sin(beta_min)  # [A m²] This is a typical value for small magnetometers used in CubeSats.
 
 def magneticstuff_robbe():
-    Bs = 0.45
-    a0 = 1.02
-    k0 = 5.0*1000
-    eta = 12
-    m = 1.97
-    e = 100
+    Bs = 0.45  # From paper
+    a0 = 1.02  # From paper
+    k0 = 5.0*1000  # From paper
+    eta = 12  # From paper
+    m = 1.97  # From paper
     mu0 = 4 * pi * 1e-7  # Permeability of free space [T m/A]
-    Ha = 25
-    kw = 0.6
-    V = 8.5
+    Ha = 25  # Magnetic field strength of earth max
+    kw = 0.6  # From paper
 
-    Nd = (4.02 * log10(e) - 0.185) / 2 * e**2
+    # ASSUMED VALUES
+    e = 100  # elongation
+    L = 8.5e-2  # m
+    r = 0.85e-3  # m
+    V = L * pi * r**2
+
+    Nd = (4.02 * log10(e) - 0.185) / 2 / e**2
     Hmax = (-(Bs - mu0 / Nd * Ha) + sqrt((Bs - mu0 / Nd * Ha)**2 + 4 * (k0 + mu0 / Nd) * a0 * Bs)) / (2 * (k0 + mu0 / Nd))
     
     Bmax1 = Bs * (1 - a0 / Hmax) + k0 * Hmax
     Bmax2 = (Ha - Hmax) * mu0 / Nd
 
-    Whm1 = eta * Bmax1 ** m
-    Whm2 = eta * Bmax2 ** m
+    Whm1 = eta * Bmax1**m
+    Whm2 = eta * Bmax2**m
+
+    Wh1 = kw * Whm1 * V
+    Wh2 = kw * Whm2 * V
+
+    omega0 = 25*pi/180  # rad/s --> 25 deg/s ~ 4.2 RPM
+    omega = 0.1  # rad/s --> ~1 RPM
+    I = 0.001  # Moment of inertia Assumption
+
+    td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
+    td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
 
     print("===== robbe magnetic stuff =====")
     print(f"{Bmax1=}, {Bmax2=}")
+    print(f"{Wh1=}, {Wh2=}")
+    print(f"{Whm1=}, {Whm2=}")
+    print(f"{td1=}, {td2=}")
+    print("================================")
     return
 
 def Bmax_mumetal() -> float:
