@@ -192,7 +192,7 @@ def gravity_gradient_torque_alt(h: int|float, m: int|float, r: int|float) -> flo
     """
     return 3 * mu_earth / (2 * 1000 * (h + r_earth))**3 * m * r**2
 
-def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
+def aero_drag_torque(A: int|float, delta_cp: int|float, h: int|float) -> float:
     """
     Function to calculate the aerodynamic drag torque on a satellite.
 
@@ -207,7 +207,6 @@ def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
     """
     r = (r_earth + h) * 1000
     V = sqrt(mu_earth / r)# Orbital velocity in [m/s]
-    delta_cp = L
     Cd = 2.5
     rho1 = 7.22e-12 #ISA value for 300 km altitude in [kg/m³]
     rho2 = 5.68e-13 #ISA value for 400 km altitude in [kg/m³]
@@ -227,17 +226,17 @@ def min_dipol_moment(beta_min: int|float) -> float:
     ---
     - `m_min:` Minimum dipole moment in [A m²].
     """
-    Ts = solar_radiation_pressure_torque(0.02, 0.2, 0, 0.1)
+    Ts = solar_radiation_pressure_torque(0.02, 0.2, 0, 0.02)
     print("Ts: " + str(Ts))
     Tg = gravity_gradient_torque_alt(400, 2, 0.1)
     print("Tg: " + str(Tg))
-    Ta = aero_drag_torque(0.02, 0.1, 360)
+    Ta = aero_drag_torque(0.02, 0.02, 360)
     print("Ta: " + str(Ta))
     
     Trms = sqrt(Ts**2 + Tg**2 + Ta**2)  # Total disturbance torque in [Nm]
     print("Trms: " + str(Trms))
     Bmin = 2.44e-5 # Minimum magnetic field strength in [T] (worst case)
-    return 10 * Trms / Bmin / sin(beta_min)  # [A m²] This is a typical value for small magnetometers used in CubeSats.
+    return 15 * Trms / Bmin / sin(beta_min)  # [A m²] This is a typical value for small magnetometers used in CubeSats.
 
 def Bmax_mumetal() -> float:
     """
@@ -322,12 +321,12 @@ def settling_timeGerhard(n: int, L: int|float, D: int|float, omega0=pi/180*12.5,
 
 ### MAIN
 if __name__ == "__main__":
-    #print("min dipole:" + str(min_dipol_moment(pi/180 * 10)))
-    # print(solar_radiation_pressure_torque(0.02, .2, 0, 0.1))
+    print("min dipole:" + str(min_dipol_moment(pi/180 * 10)))
+    # print(solar_radiation_pressure_torque(0.02, .2, 0, 0.02))
     # print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
     # print(gravity_gradient_torque_alt(400, 2, 0.1))
-    # print(aero_drag_torque(0.02, 0.1, 360))
-    print(Bmax_mumetal())
-    print("Settling time: " + str(settling_time(1, 0.085, 0.00085)/60/60/24) + " days")
-    print("Settling time C3: " + str(settling_time_C3(2)/60/60/24) + " days")
-    print("Settling time Gerhard: " + str(settling_timeGerhard(2, 0.095, 0.001)/60/60/24) + " days")
+    # print(aero_drag_torque(0.02, 0.02, 360))
+    # print(Bmax_mumetal())
+    # print("Settling time: " + str(settling_time(1, 0.085, 0.00085)/60/60/24) + " days")
+    # print("Settling time C3: " + str(settling_time_C3(2)/60/60/24) + " days")
+    # print("Settling time Gerhard: " + str(settling_timeGerhard(2, 0.095, 0.001)/60/60/24) + " days")
