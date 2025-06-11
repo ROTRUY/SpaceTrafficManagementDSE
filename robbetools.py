@@ -281,6 +281,49 @@ def magneticstuff_robbe():
     print("================================")
     return
 
+def magneticstuff_gerhard():
+    Bs = 0.45  # From paper
+    a0 = 1.02  # From paper
+    k0 = 5.0*1000  # From paper
+    eta = 12  # From paper
+    m = 1.97  # From paper
+    mu0 = 4 * pi * 1e-7  # Permeability of free space [T m/A]
+    Ha = 25  # Magnetic field strength of earth max
+    kw = 0.6  # From paper
+
+    # ASSUMED VALUES
+    e = 95  # elongation
+    L = 9.5e-2  # m
+    r = 1.00e-3  # m
+    V = L * pi * r**2
+
+    Nd = (4.02 * log10(e) - 0.185) / 2 / e**2
+    Hmax = (-(Bs - mu0 / Nd * Ha) + sqrt((Bs - mu0 / Nd * Ha)**2 + 4 * (k0 + mu0 / Nd) * a0 * Bs)) / (2 * (k0 + mu0 / Nd))
+    
+    Bmax1 = Bs * (1 - a0 / Hmax) + k0 * Hmax
+    Bmax2 = (Ha - Hmax) * mu0 / Nd
+
+    Whm1 = eta * Bmax1**m
+    Whm2 = eta * Bmax2**m
+
+    Wh1 = kw * Whm1 * V
+    Wh2 = kw * Whm2 * V
+
+    omega0 = 12.5*pi/180  
+    omega = 2.5*pi/180  
+    I = 0.018  # Moment of inertia Assumption
+
+    td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
+    td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
+
+    print("===== robbe magnetic stuff =====")
+    print(f"{Bmax1=}, {Bmax2=}")
+    print(f"{Wh1=}, {Wh2=}")
+    print(f"{Whm1=}, {Whm2=}")
+    print(f"{td1=}, {td2=}")
+    print("================================")
+    return
+
 ### CLASSES / OBJECTS
 
 ### MAIN
@@ -291,5 +334,6 @@ if __name__ == "__main__":
     # print(gravity_gradient_torque_alt(400, 2, 0.1))
     # print(aero_drag_torque(0.02, 0.1, 360))
     magneticstuff_robbe()
+    magneticstuff_gerhard()
 
     
