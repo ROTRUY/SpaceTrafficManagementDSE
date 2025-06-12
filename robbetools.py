@@ -286,8 +286,10 @@ def magneticstuff_robbe():
     td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
     td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
 
+    IDomega = I * (omega0 - omega) 
     print("===== robbe magnetic stuff =====")
     print(f"{Hmax=}")
+    print(f"{IDomega=}")
     print(f"{Bmax1=}, {Bmax2=}")
     print(f"{Wh1=}, {Wh2=}")
     print(f"{Whm1=}, {Whm2=}")
@@ -331,7 +333,9 @@ def magneticstuff_Quetzal():
     td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
     td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
 
+    IDomega = I * (omega0 - omega) 
     print("===== Quetzal magnetic stuff =====")
+    print(f"{IDomega=}")
     print(f"{Bmax1=}, {Bmax2=}")
     print(f"{Wh1=}, {Wh2=}")
     print(f"{Whm1=}, {Whm2=}")
@@ -375,7 +379,9 @@ def magneticstuff_gerhard():
     td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
     td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
 
+    IDomega = I * (omega0 - omega) 
     print("===== Gerhard magnetic stuff =====")
+    print(f"{IDomega=}")
     print(f"{Bmax1=}, {Bmax2=}")
     print(f"{Wh1=}, {Wh2=}")
     print(f"{Whm1=}, {Whm2=}")
@@ -409,8 +415,9 @@ if __name__ == "__main__":
     # print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
     # print(gravity_gradient_torque_alt(400, 2, 0.1))
     # print(aero_drag_torque(0.02, 0.1, 360))
-    # magneticstuff_robbe()
-    # magneticstuff_gerhard()
-    print(natural_frequency())
+    magneticstuff_robbe()
+    magneticstuff_gerhard()
+    magneticstuff_Quetzal()
+    # print(natural_frequency())
 
     
