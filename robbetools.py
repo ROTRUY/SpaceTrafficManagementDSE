@@ -192,7 +192,7 @@ def gravity_gradient_torque_alt(h: int|float, m: int|float, r: int|float) -> flo
     """
     return 3 * mu_earth / (2 * 1000 * (h + r_earth))**3 * m * r**2
 
-def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
+def aero_drag_torque(A: int|float, delta_cp: int|float, h: int|float) -> float:
     """
     Function to calculate the aerodynamic drag torque on a satellite.
 
@@ -207,7 +207,6 @@ def aero_drag_torque(A: int|float, L: int|float, h: int|float) -> float:
     """
     r = (r_earth + h) * 1000
     V = sqrt(mu_earth / r)# Orbital velocity in [m/s]
-    delta_cp = L
     Cd = 2.5
     rho1 = 7.22e-12 #ISA value for 300 km altitude in [kg/m³]
     rho2 = 5.68e-13 #ISA value for 400 km altitude in [kg/m³]
@@ -227,17 +226,30 @@ def min_dipol_moment(beta_min: int|float) -> float:
     ---
     - `m_min:` Minimum dipole moment in [A m²].
     """
-    Ts = solar_radiation_pressure_torque(0.02, 0.2, 0, 0.1)
+    mu0 = 4 * pi * 1e-7  # Permeability of free space [T m/A]
+    Ts = solar_radiation_pressure_torque(0.02, 0.2, 0, 0.02)
     print("Ts: " + str(Ts))
     Tg = gravity_gradient_torque_alt(400, 2, 0.1)
     print("Tg: " + str(Tg))
-    Ta = aero_drag_torque(0.02, 0.1, 360)
+    Ta = aero_drag_torque(0.02, 0.02, 360)
     print("Ta: " + str(Ta))
     
     Trms = sqrt(Ts**2 + Tg**2 + Ta**2)  # Total disturbance torque in [Nm]
     print("Trms: " + str(Trms))
     Bmin = 2.44e-5 # Minimum magnetic field strength in [T] (worst case)
-    return 10 * Trms / Bmin / sin(beta_min)  # [A m²] This is a typical value for small magnetometers used in CubeSats.
+    
+    m_min = 15 * Trms / Bmin / sin(beta_min)  # Minimum dipole moment in [A m²]
+    Vmin = m_min * mu0 / 1.45 #1.45 for N52 magnets
+    print("Vmin: " + str(Vmin))
+    V = pi * 0.004 ** 2 * 0.006
+    print("V: " + str(V))
+    m = 1.45 * V /mu0 # 1.45 for N52 magnet
+    print("m: " + str(m))
+    
+    rho = 7500 #kg/m³ for N52 magnet
+    mass = V * rho
+    print("mass: " + str(mass))
+    return m_min
 
 def magneticstuff_robbe():
     Bs = 0.45  # From paper
@@ -275,6 +287,7 @@ def magneticstuff_robbe():
     td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
 
     print("===== robbe magnetic stuff =====")
+    print(f"{Hmax=}")
     print(f"{Bmax1=}, {Bmax2=}")
     print(f"{Wh1=}, {Wh2=}")
     print(f"{Whm1=}, {Whm2=}")
@@ -282,96 +295,122 @@ def magneticstuff_robbe():
     print("================================")
     return
 
-def Bmax_mumetal() -> float:
-    """
-    Function to calculate the maximum magnetic field strength of a mumetal shield.
-
-    Outputs
-    ---
-    - `Bmax:` Maximum magnetic field strength in [T].
-    """
-    
+def magneticstuff_Quetzal():
+    Bs = 0.45  # From paper
+    a0 = 1.02  # From paper
+    k0 = 5.0*1000  # From paper
+    eta = 12  # From paper
+    m = 1.97  # From paper
     mu0 = 4 * pi * 1e-7  # Permeability of free space [T m/A]
-    Nd = (100 * 4 / sqrt(pi) + 2) ** -1
-    Ha = 25
-    Hmax = 0
-    Bmax = (Ha - Hmax) * mu0 / Nd
-    
-    return Bmax # [T] This is a typical value for mumetal shields.
+    Ha = 25  # Magnetic field strength of earth max
+    kw = 0.6  # From paper
 
-def settling_time(n: int, L: int|float, D: int|float, omega0=pi/180*12.5, omega_end=pi/180*2.5, I = 0.001 )-> int|float: #old esimation for I=2/3 * 2 * 0.1 ** 2
-    """
-    Function to calculate the settling time of a system.
+    # ASSUMED VALUES
+    e = 95  # elongation
+    L = 9.5e-2  # m
+    r = 1.00e-3  # m
+    V = L * pi * r**2
+    n = 1 #number of rods
 
-    Outputs
-    ---
-    - `t_s:` Settling time in [s].
-    """
-    eta = 12 #for mumetal
-    m = 1.97 #for mumetal
-    Bmax = Bmax_mumetal()
-    print("I deltaOmega " + str(I * (omega0 - omega_end)))
-    print("A1: " + str(pi * (D / 2) ** 2))
+    Nd = (4.02 * log10(e) - 0.185) / 2 / e**2
+    Hmax = (-(Bs - mu0 / Nd * Ha) + sqrt((Bs - mu0 / Nd * Ha)**2 + 4 * (k0 + mu0 / Nd) * a0 * Bs)) / (2 * (k0 + mu0 / Nd))
     
-    Whm = eta * Bmax ** m
-    Wh = 0.6 * Whm * L * pi * (D / 2) ** 2 * n
-    
-    print("whm: " + str(Whm))
-    
-    t = 2 * pi * I / Wh * (omega0 - omega_end)
-    return t
+    Bmax1 = Bs * (1 - a0 / Hmax) + k0 * Hmax
+    Bmax2 = (Ha - Hmax) * mu0 / Nd
 
-def settling_time_C3(n: int, L=0.07, A=11*10**-6)-> int|float:
-    """
-    Function to calculate the settling time of a system.
+    Whm1 = eta * Bmax1**m
+    Whm2 = eta * Bmax2**m
 
-    Outputs
-    ---
-    - `t_s:` Settling time in [s].
-    """
-    eta = 13 #for permenorm
-    m = 1.35 #for permenorm
-    Bmax = 0.0125
-    
-    Whm = eta * Bmax ** m
-    Wh = 0.6 * Whm * L * A * n
-    
-    print("whm: " + str(Whm))
-    
-    t = 2 * pi / Wh * 0.0027  # 0.0027 is the I deltaOmega value for C3
-    return t #should come out to 86 days
+    Wh1 = kw * Whm1 * V * n
+    Wh2 = kw * Whm2 * V * n
 
-def settling_timeGerhard(n: int, L: int|float, D: int|float, omega0=pi/180*12.5, omega_end=pi/180*2.5, I=0.0954)-> int|float:
-    """
-    Function to calculate the settling time of a system.
+    omega0 = 25*pi/180  
+    omega = 1.5*pi/180  
+    I = 0.0018  # Moment of inertia Assumption
 
-    Outputs
-    ---
-    - `t_s:` Settling time in [s].
-    """
-    eta = 12 #for mumetal
-    m = 1.97 #for mumetal
-    Bmax = 0.0125
-    print("I deltaOmega " + str(I * (omega0 - omega_end)))
-    print("A: " + str(pi * (D / 2) ** 2))
-    Whm = eta * Bmax ** m
-    Wh = 0.6 * Whm * L * pi * (D / 2) ** 2 * n
-    
-    t = 2 * pi * I / Wh * (omega0 - omega_end)
-    return t
-    
+    td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
+    td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
 
-### CLASSES / OBJECTS
+    print("===== Quetzal magnetic stuff =====")
+    print(f"{Bmax1=}, {Bmax2=}")
+    print(f"{Wh1=}, {Wh2=}")
+    print(f"{Whm1=}, {Whm2=}")
+    print(f"{td1=}, {td2=}")
+    print("================================")
+    return #should be within 4 to 6 days
+
+def magneticstuff_gerhard():
+    Bs = 0.45  # From paper
+    a0 = 1.02  # From paper
+    k0 = 5.0*1000  # From paper
+    eta = 12  # From paper
+    m = 1.97  # From paper
+    mu0 = 4 * pi * 1e-7  # Permeability of free space [T m/A]
+    Ha = 25  # Magnetic field strength of earth max
+    kw = 0.6  # From paper
+
+    # ASSUMED VALUES
+    e = 95  # elongation
+    L = 9.5e-2  # [m]
+    r = 1.00e-3  # [m]
+    V = L * pi * r**2
+    n = 2 #number of rods
+
+    Nd = (4.02 * log10(e) - 0.185) / 2 / e**2
+    Hmax = (-(Bs - mu0 / Nd * Ha) + sqrt((Bs - mu0 / Nd * Ha)**2 + 4 * (k0 + mu0 / Nd) * a0 * Bs)) / (2 * (k0 + mu0 / Nd))
+    
+    Bmax1 = Bs * (1 - a0 / Hmax) + k0 * Hmax
+    Bmax2 = (Ha - Hmax) * mu0 / Nd
+
+    Whm1 = eta * Bmax1**m
+    Whm2 = eta * Bmax2**m
+
+    Wh1 = kw * Whm1 * V * n
+    Wh2 = kw * Whm2 * V * n
+
+    omega0 = 12.5*pi/180  
+    omega = 2.5*pi/180  
+    I = 0.018  # Moment of inertia ! Assumption !
+
+    td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
+    td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
+
+    print("===== Gerhard magnetic stuff =====")
+    print(f"{Bmax1=}, {Bmax2=}")
+    print(f"{Wh1=}, {Wh2=}")
+    print(f"{Whm1=}, {Whm2=}")
+    print(f"{td1=}, {td2=}")
+    print("================================")
+    return #should be within 5 to 7 days
+
+def natural_frequency():
+    rho = 2.70  # [g/cm³]
+    m = 120  # [g]
+    Lt = 10  # [cm]
+    t = (Lt - sqrt(Lt**2 - m / rho / Lt)) / 2 *1e-3  # [m]
+
+    Em = 71e+9  # Young's modulus of structural material [Pa]
+    L = 0.1  # [m]
+    A_lat = L**2  # [m²]
+    As = A_lat - (L - 2 * t)**2  # [m²]
+    ms = 1.2  # [kg]
+    I = (L**4 - (L - 2 * t)**4) / 12
+
+    Es = Em * As / A_lat
+
+    fnlong = sqrt(Es * A_lat /( ms * L)) / (2 * pi)
+    fnlat = sqrt(3 * Es * I / (ms * L**3)) / (2 * pi)
+    return t, A_lat, As, Es, I, fnlong, fnlat
 
 ### MAIN
 if __name__ == "__main__":
-    #print("min dipole:" + str(min_dipol_moment(pi/180 * 10)))
-    # print(solar_radiation_pressure_torque(0.02, .2, 0, 0.1))
+    # print("min dipole:" + str(min_dipol_moment(pi/180 * 10)))
+    # print(solar_radiation_pressure_torque(0.02, .2, 0, 0.02))
     # print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
     # print(gravity_gradient_torque_alt(400, 2, 0.1))
     # print(aero_drag_torque(0.02, 0.1, 360))
-    magneticstuff_robbe()
-    print(Bmax_mumetal())
-    print("Settling time: " + str(settling_time(1, 0.085, 0.00085)/60/60/24) + " days")
-    print("Settling time C3: " + str(settling_time_C3(2)/60/60/24) + " days")
-    print("Settling time Gerhard: " + str(settling_timeGerhard(2, 0.095, 0.001)/60/60/24) + " days")
+    # magneticstuff_robbe()
+    # magneticstuff_gerhard()
+    print(natural_frequency())
+
+    
