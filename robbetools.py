@@ -357,8 +357,8 @@ def magneticstuff_gerhard():
     # ASSUMED VALUES
     e = 95  # elongation
     L = 9.5e-2  # [m]
-    r = 1.00e-3  # [m]
-    V = L * pi * r**2
+    D = 1.00e-3  # [m]
+    V = L * pi * (D/2)**2
     n = 2 #number of rods
 
     Nd = (4.02 * log10(e) - 0.185) / 2 / e**2
@@ -422,8 +422,8 @@ def magneticstuff_sensitivity():
     # ASSUMED VALUES
     e = 100  # elongation
     L = 8.5e-2  # m
-    r = 0.85e-3 * 1.5 # m
-    V = L * pi * r**2
+    D = 0.85e-3 * 1.5 # m
+    V = L * pi * (D/2)**2
 
     Nd = (4.02 * log10(e) - 0.185) / 2 / e**2
     Hmax = (-(Bs - mu0 / Nd * Ha) + sqrt((Bs - mu0 / Nd * Ha)**2 + 4 * (k0 + mu0 / Nd) * a0 * Bs)) / (2 * (k0 + mu0 / Nd))
