@@ -5,22 +5,31 @@ import matplotlib.pyplot as plt
 
 ##################### Variable Initialization ########################################
 
-ADCS_Data_Generation = 20        # Bits per second
-CDH_Data_Generation = 20        # Bits per second
-Snapshot_Period = 300           #Time between snapshots
-GNSS_Size = 256                 #Bits
-Payload_Telemetry_Data_Generation = 10              #Bits per second
-Validation_Data_Generation = Payload_Telemetry_Data_Generation + float(GNSS_Size)/float(Snapshot_Period)      #Nominal Bits per second
-Standardized_Data_Generation = Payload_Telemetry_Data_Generation + float(GNSS_Size)/float(Snapshot_Period)      # Bits per second
-EPS_Data_Generation = 20                   # Bits per second
-Misc_Data_Generation = 20                 # Bits per second
-Baud_Rate = 9600                        #Symbols that can be downlinked per second
-Encoding_Overhead_Ratio = 0.7           #Bits have to be encoded, error correction, encryption
-Compression_Ratio = 1.5             #How much data can be compressed, essentially increasing data rate
-Downlink_Data_Rate = Baud_Rate * Encoding_Overhead_Ratio * Compression_Ratio #Data Bits per second
+HK_Snapshot_Rate = 1./20 #how many time is housekeeping data measured
+ADCS_HK_Data_Size = 200        # Bits
+OBC_HK_Data_Size = 600        # Bits
+Transceiver_HK_Data_Size = 424       #Bits
+EPS_HK_Data_Size = 1000       #Bits
+SP_HK_Data_Size = 200        #Bits
+VP_HK_Data_Size = 200        #Bits
+
+HK_Data_Size_Total = ADCS_HK_Data_Size + OBC_HK_Data_Size + Transceiver_HK_Data_Size + EPS_HK_Data_Size + SP_HK_Data_Size + VP_HK_Data_Size
+# HK_Data_Size_Total = 3250
+
+Payload_Snapshot_Rate = 1./60           #Time between snapshots
+GNSS_Size = 1000                 #Bits
+
+Data_Generation_Total = HK_Data_Size_Total * HK_Snapshot_Rate + GNSS_Size * Payload_Snapshot_Rate #Data per second
+
+Baud_Rate = 4800                        #Symbols that can be downlinked per second
+Encoding_Overhead_Ratio = 0.4           #Bits have to be encoded, error correction, encryption
+Compression_Ratio = 4             #How much data can be compressed, essentially increasing data rate
+Safety_Factor = 0.9
+Downlink_Data_Rate = Baud_Rate * Encoding_Overhead_Ratio * Compression_Ratio * Safety_Factor #Data Downlink Bits per second
 Storage_Start = 1000000 #Storage start of 1 Mb 
 
-Data_Generation_Total = ADCS_Data_Generation + CDH_Data_Generation + Validation_Data_Generation + Standardized_Data_Generation + EPS_Data_Generation + Misc_Data_Generation
+# Data_Generation_Total = 250
+
 
 ####### Function to go from a time array to check and a value array to a boolean array ######
 
@@ -38,8 +47,11 @@ def getQueryTimeBooleanArray(query_array, check_array):
 ##################### Dataset Initialization ########################################
 
 # e_data = Get_Eclipse_Data("GSCData-500km-21mar/EclipseData500.txt")
-gp_data = Get_GroundPass_Data("GSCData-500km-21mar/delft60.txt")
-query_times = pd.date_range('2029-03-21 0:00:00', periods=2678000, freq='s').values
+# gp_data = Get_GroundPass_Data("GSCData-500km-21mar/delft60.txt") #delft ground station, 60 degrees incl.
+# query_times = pd.date_range('2029-03-21 0:00:00', periods=2500000, freq='s').values
+
+gp_data = Get_GroundPass_Data("GSCData500km/delft80.txt") # delft ground station, sun synchronous orbit
+query_times = pd.date_range('2029-01-02 0:00:00', periods=2500000, freq='s').values
 
 
 ########################### Find array how much the data is being added or removed ###############
@@ -71,8 +83,8 @@ Storage_Data = pd.DataFrame({
 Storage_Data = Storage_Data.set_index('Query_Times')
 worst_storage_time = Storage_Data['Storage_Size'].idxmax()
 
-window_start = worst_storage_time - pd.Timedelta(seconds=70000)
-window_end   = worst_storage_time + pd.Timedelta(seconds=40000)
+window_start = worst_storage_time - pd.Timedelta(seconds=370000)
+window_end   = worst_storage_time + pd.Timedelta(seconds=340000)
 
 df_window = Storage_Data.loc[window_start : window_end]
 
