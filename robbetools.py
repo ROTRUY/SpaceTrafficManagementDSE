@@ -251,6 +251,75 @@ def min_dipol_moment(beta_min: int|float) -> float:
     print("mass: " + str(mass))
     return m_min
 
+def sensi_min_dipol_moment(beta_max: int|float, n_trms) -> float:
+    """
+    Function to calculate the minimum dipole moment of a magnetometer.
+
+    Inputs
+    ---
+    - `beta_min:` Desired pointing accuracy [rad].
+    
+    Outputs
+    ---
+    - `m_min:` Minimum dipole moment in [A m²].
+    """
+    mu0 = 4 * pi * 1e-7  # Permeability of free space [T m/A]
+    Ts = solar_radiation_pressure_torque(0.02, 0.2, 0, 0.02)
+    Tg = gravity_gradient_torque_alt(400, 2, 0.1)
+    Ta = aero_drag_torque(0.02, 0.02, 360)
+
+    Trms = sqrt(Ts**2 + Tg**2 + Ta**2)  * n_trms# Total disturbance torque in [Nm]
+    
+    Bmin = 2.44e-5 # Minimum magnetic field strength in [T] (worst case)
+    
+    m_min = 15 * Trms / Bmin / sin(beta_max)  # Minimum dipole moment in [A m²]
+    print("m_min: " + str(m_min))
+    Vmin = m_min * mu0 / 1.45 #1.45 for N52 magnets
+    
+    V = pi * 0.004 ** 2 * 0.006
+    
+    m = 1.45 * V /mu0 # 1.45 for N52 magnet
+    
+    
+    rho = 7500 #kg/m³ for N52 magnet
+    mass = V * rho
+    
+    expected_mass = Vmin * rho  # Expected mass of the magnet in [kg]
+    return Trms, expected_mass, m_min
+
+def performe_sensi_permanent_magnet():
+    """
+    Function to perform sensitivity analysis for permanent magnet.
+    """
+    beta_max = pi/180 * 10  # Maximum pointing accuracy in [rad]
+    n_trms = 1.1  # Number of disturbance torque values to average
+    n_betamax = 0.9  # Number of beta_max values to average
+    
+    Trms, expected_mass, m_min = sensi_min_dipol_moment(beta_max, 1)
+    
+    Trms2, expected_mass2, m_min2 = sensi_min_dipol_moment(beta_max, n_trms)
+    
+    print("Trms change =========================================")
+    print("Trms diff: " + str(Trms2 - Trms))
+    print("Expected mass diff: " + str(expected_mass2 - expected_mass))
+    print("mass percentage diff: " + str((expected_mass2 - expected_mass) / expected_mass * 100) + "%")
+    print("m_min diff: " + str(m_min2 / m_min))
+    print("==============================================")
+    
+    Trms, expected_mass, m_min = sensi_min_dipol_moment(beta_max, 1)
+    
+    Trms2, expected_mass2, m_min2 = sensi_min_dipol_moment(beta_max * n_betamax, 1)
+    
+    print("Beta_max change =========================================")
+    print("beta max diff: " + str( beta_max * n_betamax - beta_max))
+    print("Expected mass diff: " + str(expected_mass2 - expected_mass))
+    print("mass percentage diff: " + str((expected_mass2 - expected_mass) / expected_mass * 100) + "%")
+    print("m_min diff: " + str(m_min2 / m_min))
+    print("==============================================")
+    
+    
+    return 
+
 def natural_frequency():
     rho = 2.70  # [g/cm³]
     m = 120  # [g]
@@ -272,11 +341,11 @@ def natural_frequency():
 
 ### MAIN
 if __name__ == "__main__":
-    # print("min dipole:" + str(min_dipol_moment(pi/180 * 10)))
     # print(solar_radiation_pressure_torque(0.02, .2, 0, 0.02))
     # print(gravity_gradient_torque_worst_case(0.1, 2, 400, theta=pi/4))
     # print(gravity_gradient_torque_alt(400, 2, 0.1))
     # print(aero_drag_torque(0.02, 0.1, 360))
 
     # magneticstuff_gerhard()
-    print(natural_frequency())
+    # print(natural_frequency())
+    performe_sensi_permanent_magnet()
