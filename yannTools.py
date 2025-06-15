@@ -32,7 +32,7 @@ def magneticstuff_Quetzal():
 
     omega0 = 25*pi/180  
     omega = 1.833*pi/180  
-    I = 0.001773  # Moment of inertia Assumption
+    I = 0.0018  # Moment of inertia Assumption
 
     td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
     td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
