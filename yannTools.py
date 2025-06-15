@@ -31,8 +31,8 @@ def magneticstuff_Quetzal():
     Wh2 = kw * Whm2 * V * n
 
     omega0 = 25*pi/180  
-    omega = 1.5*pi/180  
-    I = 0.0017  # Moment of inertia Assumption
+    omega = 1.833*pi/180  
+    I = 0.001773  # Moment of inertia Assumption
 
     td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
     td2 = 2 * pi * I / Wh2 * (omega0 - omega) / 60 / 60 / 24 # days
@@ -124,6 +124,7 @@ def magneticstuff_robbe():
     omega0 = 25*pi/180  # rad/s --> 25 deg/s ~ 4.2 RPM
     omega = 0.1  # rad/s --> ~1 RPM
     I = 1/6 * 1.2 * 0.1 ** 2   # Moment of inertia Assumption
+    print(f"Moment of inertia: {I}")    
     
 
     td1 = 2 * pi * I / Wh1 * (omega0 - omega) / 60 / 60 / 24  # days
