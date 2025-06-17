@@ -12,16 +12,18 @@ t_mis = 6  #Mission duration in months
 
 #Orbit Values 
 
-t_day = 58.768  #Day time in minutes
-t_ecl = 35.699  #Eclipse time in minutes
-t_orb = t_day + t_ecl  #Orbit time in minutes
+t_orb = 94.467  #Orbit time in minutes
+t_eclfrac = 0.3779  #Eclipse fraction in orbit 
+
+t_day = t_orb * (1 - t_eclfrac)  #Day time in minutes
+t_ecl = t_orb * t_eclfrac  #Eclipse time in minutes
 
 theta = 0  #Incidence angle of the solar arrays 
 
 #Power Requirements
 
-P_day_avg = 1.05
-P_ecl_avg = 1.05
+P_day_avg = 0.982
+P_ecl_avg = 0.982 
 
 #Solar Cell Properties
 
