@@ -262,7 +262,7 @@ NodeEPS.Toggle = [0, 0, 0, 0, 0]
 
 NodePayloadI = Node(emissivity=0, absorptivity=0, Neigbors=[
     (7, CASub, 666), (8, CASub, 666), (9, CASub, 666), (10, CASub, 666), (12, CABS, 666)
-], ID=11, m=0.031 + 0.00226, cp=750, Area=0, F=FP, Qgen=0)#0.00026)
+], ID=11, m=0.030 + 0.00226 + 0.051, cp=750, Area=0, F=FP, Qgen=0)#0.00026)
 NodePayloadI.Toggle = [0, 0, 0, 1, 0]
 
 NodeFrame = Node(emissivity=0, absorptivity=0.0, Neigbors=[
@@ -398,7 +398,7 @@ if PLOT:
 total_mass = sum(node.m for node in Nodes)
 print(f"Total mass of all components: {total_mass:.4f} kg")
 
-if PLOT:
+if not PLOT:
     import networkx as nx
     import matplotlib.pyplot as plt
 
@@ -430,7 +430,7 @@ if PLOT:
         G, pos,
         with_labels=False,
         node_color=node_colors,
-        node_size=1500,
+        node_size=1000,
         font_size=14,
         font_weight='bold',
         edge_color=edge_colors,

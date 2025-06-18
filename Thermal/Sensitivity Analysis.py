@@ -22,7 +22,7 @@ def r(theta):
 # Orbital parameters
 #--------------------------------------------------------------
 
-OrbitalHeight = 800  # [km] 
+OrbitalHeight = 500  # [km] 
 R = 6371             # [km] Radius of Earth
 OrbitalPeriod = 2 * np.pi * np.sqrt(((OrbitalHeight+R)*1000)**3 / (3.986004418*10**14)) # [s]
 F = (R)**2/(OrbitalHeight+R)**2
