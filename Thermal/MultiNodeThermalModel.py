@@ -367,11 +367,11 @@ if not PLOT:
     for idx, node_idx in enumerate(display_nodes):
         label = node_names[node_idx] if node_idx < len(node_names) else f'Node {node_idx}'
         plt.plot(times/OrbitalPeriod, np.array(temps_all_nodes[node_idx])-273.15, label=label, color=cmap(idx))
-    plt.xlabel('Orbits [-]',fontsize= 20)
+    plt.xlabel('Orbits',fontsize= 20)
     plt.ylabel('Temperature [°C]',fontsize= 20)
     #plt.title('Selected Node Temperatures Over Time')
     plt.xlim(6,7) 
-    plt.legend(loc = 'best')
+    plt.legend(loc = 'best',fontsize = 14)
     plt.grid(True)
     plt.tick_params(axis='both', labelsize=14)  # 14 is the font size
     plt.savefig('Temperature_Variation.png')
